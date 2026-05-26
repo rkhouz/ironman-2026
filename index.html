@@ -1,0 +1,1134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bobby's Ironman 2026 — Training Progress</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.js"></script>
+<style>
+:root{
+  color-scheme:dark;
+  --navy:#1F3864; --steel:#2E75B6; --sky:#9DC3E6;
+  --bg:#0d1525; --panel:#162236; --panel2:#1d2d49; --line:#2b3c5c;
+  --text:#e8eef7; --muted:#9fb0c7;
+  --ae:#3aa760; --rec:#7e93b3; --thr:#e0863a; --str:#a878d9;
+  --rest:#6b7280; --race:#c53030;
+  --peak-bg:#1a3a26; --recover-bg:#352c10; --taper-bg:#3a261a; --race-bg:#3a1a1a;
+}
+*{box-sizing:border-box}
+body{
+  margin:0; padding:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  background:linear-gradient(135deg,#0d1525 0%,#142035 100%); color:var(--text); min-height:100vh;
+}
+.wrap{max-width:1500px; margin:0 auto; padding:24px}
+header{display:flex; justify-content:space-between; align-items:center; margin-bottom:24px; gap:20px; flex-wrap:wrap}
+header h1{margin:0; font-size:28px; font-weight:700}
+header h1 small{font-weight:400; opacity:.7; font-size:16px}
+.countdown{display:flex; gap:14px; align-items:center}
+.countdown .num{font-size:48px; font-weight:700; color:var(--race); line-height:1; font-variant-numeric:tabular-nums}
+.countdown .lbl{font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:1px}
+.race-pill{background:var(--race); color:white; padding:6px 12px; border-radius:20px; font-weight:700; font-size:12px; letter-spacing:.5px}
+.ro-pill{background:var(--panel2); color:var(--sky); border:1px solid var(--line); padding:6px 12px;
+  border-radius:20px; font-weight:600; font-size:12px; letter-spacing:.3px; margin-left:8px}
+
+.stats{display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:24px}
+.stat{background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:18px}
+.stat .val{font-size:30px; font-weight:700; line-height:1; font-variant-numeric:tabular-nums}
+.stat .lbl{font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:1px; margin-top:8px}
+.stat .sub{font-size:13px; color:var(--muted); margin-top:6px}
+.stat .dist-bar{height:8px; border-radius:4px; overflow:hidden; display:flex; margin-top:10px}
+.stat .dist-bar span{display:block; height:100%}
+.stat .dist-line{font-size:11px; color:var(--muted); margin-top:6px; display:flex; justify-content:space-between}
+.stat .dist-line strong{color:var(--text); font-weight:600}
+
+.section{background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:20px; margin-bottom:20px}
+.section h2{margin:0 0 16px; font-size:18px; font-weight:600; display:flex; align-items:center; gap:10px}
+.section h2 .dot{width:8px; height:8px; border-radius:50%; background:var(--steel)}
+.section h2 .hint{font-weight:400; font-size:13px; color:var(--muted); margin-left:auto}
+
+.timeline{display:flex; height:60px; border-radius:8px; overflow:hidden; margin-bottom:8px}
+.timeline-block{flex:1; display:flex; align-items:center; justify-content:center; flex-direction:column; color:white; font-weight:600; font-size:13px; transition:.2s; border-right:1px solid rgba(0,0,0,.1)}
+.timeline-block:last-child{border-right:none}
+.timeline-block .sub{font-size:10px; font-weight:400; opacity:.85; margin-top:2px}
+.tl-b1{background:#1F3864} .tl-b2{background:#305496} .tl-b3{background:#2E75B6}
+.tl-b4{background:#9DC3E6; color:#0d1525} .tl-race{background:var(--race); flex:0.3}
+
+.chart-wrap{position:relative; height:280px}
+
+/* Progress (read-only) */
+.progress-wrap{background:var(--panel2); border-radius:10px; padding:14px 16px; margin-bottom:14px}
+.progress-top{display:flex; align-items:center; gap:14px; margin-bottom:10px; flex-wrap:wrap}
+.progress-label{font-size:14px; font-weight:600}
+.progress-label strong{color:#7ddc9c; font-size:20px; font-variant-numeric:tabular-nums}
+.progress-pct{font-size:15px; font-weight:700; color:#7ddc9c; font-variant-numeric:tabular-nums}
+.updated-tag{margin-left:auto; font-size:12px; color:var(--muted)}
+.progress-track{height:10px; background:#0d1525; border-radius:6px; overflow:hidden}
+.progress-fill{height:100%; background:linear-gradient(90deg,var(--ae),#52c97a); border-radius:6px; width:0%; transition:width .35s ease}
+
+/* Calendar */
+.cal{display:grid; grid-template-columns:80px repeat(7,minmax(0,1fr)) 80px; gap:6px}
+.cal .hdr{font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:1px; text-align:center; padding:6px 0; font-weight:600}
+.cal .wlabel{display:flex; flex-direction:column; align-items:center; justify-content:center;
+  background:var(--panel2); border-radius:8px; padding:8px 4px; font-size:11px; font-weight:600; gap:4px}
+.cal .wlabel .wnum{font-size:15px; font-weight:700}
+.cal .wlabel .hrs{font-size:10px; color:var(--muted); font-weight:400}
+.cal .wlabel .mini-bar{display:flex; width:100%; height:5px; border-radius:3px; overflow:hidden; margin-top:4px}
+.cal .wlabel .mini-bar span{display:block; height:100%}
+.cal .wlabel .mini-pct{font-size:9px; color:var(--muted); margin-top:2px; line-height:1.3; text-align:center}
+.cal .wlabel .wk-done{font-size:9px; font-weight:700; color:var(--muted); margin-top:3px; letter-spacing:.3px}
+.cal .wlabel .wk-done.complete{color:#7ddc9c}
+.cal .day{background:var(--panel2); border-radius:8px; padding:8px; min-height:104px; cursor:pointer;
+  transition:.2s; border:1px solid transparent; font-size:11px; line-height:1.4}
+.cal .day:hover{border-color:var(--sky); background:#243957}
+.cal .day .date{font-size:10px; color:var(--muted); font-weight:600; margin-bottom:4px}
+.cal .day .sess{display:flex; align-items:flex-start; gap:5px; margin-bottom:4px; padding:1px 4px 1px 8px; position:relative; border-radius:3px; cursor:pointer; transition:background .12s}
+.cal .day .sess:hover{background:rgba(255,255,255,.07)}
+.cal .day .sess::before{content:""; position:absolute; left:0; top:2px; bottom:2px; width:3px; border-radius:2px}
+.cal .day .sess .txt{flex:1; min-width:0}
+.cal .day .sess.ae{color:#bce5cb}     .cal .day .sess.ae::before{background:var(--ae)}
+.cal .day .sess.rec{color:#c8d3e0; font-style:italic}  .cal .day .sess.rec::before{background:var(--rec)}
+.cal .day .sess.thr{color:#f4c896; font-weight:600}    .cal .day .sess.thr::before{background:var(--thr)}
+.cal .day .sess.str{color:#d9c4f0; font-weight:600}    .cal .day .sess.str::before{background:var(--str)}
+.cal .day .sess.rest{color:#a8b0bd; font-style:italic; font-weight:600; text-transform:uppercase; letter-spacing:.5px}
+.cal .day .sess.rest::before{background:var(--rest)}
+.cal .day .sess.race{color:white; font-weight:700; font-size:13px}
+.cal .day .sess.race::before{display:none}
+/* completion indicator (read-only — non-interactive) */
+.cal .day .sess .ck{flex:0 0 13px; width:13px; height:13px; margin-top:1px;
+  border:1.6px solid currentColor; border-radius:3px; opacity:.45; position:relative}
+.cal .day .sess.done .ck{opacity:1; background:currentColor}
+.cal .day .sess.done .ck::after{content:"✓"; position:absolute; inset:-1px; display:flex;
+  align-items:center; justify-content:center; font-size:9px; font-weight:800; color:var(--panel2)}
+.cal .day .sess.done .txt{text-decoration:line-through; opacity:.5}
+
+.cal .day.rest-day{
+  background:repeating-linear-gradient(45deg,#3a3f4b 0,#3a3f4b 8px,#34394a 8px,#34394a 16px);
+  border-color:#4a505d;
+}
+.cal .day.rest-day:hover{
+  background:repeating-linear-gradient(45deg,#454b58 0,#454b58 8px,#3d4253 8px,#3d4253 16px);
+  border-color:#6a7283;
+}
+.cal .day.race{background:var(--race); border-color:var(--race)}
+
+.ph-build{border-left:4px solid var(--steel)}
+.ph-peak{border-left:4px solid var(--ae); background:var(--peak-bg)}
+.ph-recover{border-left:4px solid #e6b730; background:var(--recover-bg)}
+.ph-taper{border-left:4px solid var(--thr); background:var(--taper-bg)}
+.ph-race{border-left:4px solid var(--race); background:var(--race-bg)}
+
+.legend{display:flex; gap:14px; flex-wrap:wrap; margin-top:12px; font-size:12px; color:var(--muted)}
+.legend .sw{display:inline-block; width:10px; height:10px; border-radius:2px; margin-right:6px; vertical-align:middle}
+.legend .sw-rest{display:inline-block; width:14px; height:10px; vertical-align:middle; margin-right:6px;
+  background:repeating-linear-gradient(45deg,#3a3f4b 0,#3a3f4b 4px,#34394a 4px,#34394a 8px); border:1px solid #4a505d; border-radius:2px}
+
+/* Workout Library */
+.library{display:grid; grid-template-columns:repeat(2,1fr); gap:14px}
+@media(max-width:1100px){.library{grid-template-columns:1fr}}
+.wcard{background:var(--panel2); border-radius:10px; padding:14px 16px; border-left:4px solid var(--steel); font-size:13px}
+.wcard.ae{border-left-color:var(--ae)}
+.wcard.rec{border-left-color:var(--rec)}
+.wcard.thr{border-left-color:var(--thr)}
+.wcard.str{border-left-color:var(--str)}
+.wcard .wname{font-weight:700; font-size:14px; display:flex; justify-content:space-between; align-items:center; margin-bottom:6px}
+.wcard .badge{font-size:10px; padding:2px 8px; border-radius:10px; font-weight:600; letter-spacing:.5px}
+.wcard.ae .badge{background:rgba(58,167,96,.2); color:#86d49d}
+.wcard.rec .badge{background:rgba(126,147,179,.2); color:#c8d3e0}
+.wcard.thr .badge{background:rgba(224,134,58,.2); color:#f4c896}
+.wcard.str .badge{background:rgba(168,120,217,.2); color:#d9c4f0}
+.wcard .struct{color:var(--muted); margin-bottom:6px; font-size:12px; line-height:1.5}
+.wcard .prog{color:#bcc8d8; font-size:12px; line-height:1.5}
+.wcard .prog strong{color:var(--text)}
+
+.callout{background:#1a2940; border-left:4px solid var(--sky); border-radius:8px; padding:14px 18px; margin-top:12px; font-size:13px; line-height:1.7}
+
+/* Modal */
+.modal{position:fixed; inset:0; background:rgba(0,0,0,.7); display:none; justify-content:center; align-items:center; z-index:100}
+.modal.open{display:flex}
+.modal-card{background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:24px;
+  max-width:720px; width:90%; max-height:85vh; overflow:auto}
+.modal-card h3{margin:0 0 4px; font-size:20px}
+.modal-card .meta{color:var(--muted); font-size:13px; margin-bottom:18px}
+.modal-card .week-banner{margin-bottom:14px; padding:12px; background:#243957; border-radius:8px; font-size:13px}
+.modal-card .day-detail{padding:10px 0; border-bottom:1px solid var(--line)}
+.modal-card .day-detail:last-child{border-bottom:none}
+.modal-card .dname{font-weight:700; font-size:13px; color:var(--sky); margin-bottom:6px}
+.modal-card .dsess{font-size:13px; margin:5px 0; padding:5px 8px 5px 10px; display:flex; align-items:flex-start; gap:10px; border-radius:4px; cursor:pointer; transition:background .12s}
+.modal-card .dsess:hover{background:rgba(255,255,255,.05)}
+.modal-card .dsess .dtxt{flex:1}
+.modal-card .dmin{color:var(--muted); font-size:11px}
+.modal-card .mck{flex:0 0 16px; width:16px; height:16px; margin-top:1px; border:2px solid var(--muted);
+  border-radius:4px; position:relative}
+.modal-card .dsess.done .mck{background:var(--ae); border-color:var(--ae)}
+.modal-card .dsess.done .mck::after{content:"✓"; position:absolute; inset:-1px; display:flex;
+  align-items:center; justify-content:center; font-size:11px; font-weight:800; color:#fff}
+.modal-card .dsess.done .dtxt{text-decoration:line-through; opacity:.5}
+.close-btn{float:right; cursor:pointer; color:var(--muted); font-size:24px; line-height:1}
+
+/* Workout detail view */
+.detail-effort-pill{display:inline-block; padding:3px 10px; border-radius:12px; font-size:10px;
+  font-weight:700; letter-spacing:.5px; text-transform:uppercase; vertical-align:baseline}
+.detail-effort-pill.AE{background:rgba(58,167,96,.2); color:#86d49d}
+.detail-effort-pill.REC{background:rgba(126,147,179,.2); color:#c8d3e0}
+.detail-effort-pill.THR{background:rgba(224,134,58,.2); color:#f4c896}
+.detail-effort-pill.STR{background:rgba(168,120,217,.2); color:#d9c4f0}
+.detail-effort-pill.REST{background:rgba(107,114,128,.2); color:#a8b0bd}
+.detail-effort-pill.RACE{background:rgba(197,48,48,.25); color:#ffb0b0}
+.detail-desc{font-size:12.5px; color:#cfd8e3; background:#1a2940; border-left:3px solid var(--steel);
+  border-radius:6px; padding:9px 12px; margin:6px 0 4px}
+.detail-desc strong{color:#e8eef7}
+.detail-sec-h{font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--sky);
+  font-weight:700; margin:18px 0 8px}
+.detail-block{padding:9px 14px; margin:5px 0; background:#243957; border-left:3px solid var(--sky);
+  border-radius:6px; font-size:13px; line-height:1.5}
+.detail-block .dbl-head{display:flex; justify-content:space-between; align-items:baseline; gap:10px; margin-bottom:2px}
+.detail-block .dbl-head strong{color:#e8eef7; font-size:13px}
+.detail-block .dbl-time{color:var(--muted); font-size:11.5px; flex-shrink:0; font-weight:600}
+.detail-block .dbl-what{font-size:12.5px; color:#d8e2f0}
+.detail-block .dbl-target{font-size:11.5px; color:#a4b5c9; margin-top:3px}
+.detail-block.is-main{border-left-color:var(--thr); background:#2a3a4f}
+.detail-block.is-warm{border-left-color:#bce5cb}
+.detail-block.is-cool{border-left-color:var(--rec)}
+.pace-zones{display:flex; flex-wrap:wrap; gap:8px}
+.pace-zone{background:#1a2940; padding:6px 10px; border-radius:6px; font-size:12px; line-height:1.4}
+.pace-zone strong{color:var(--sky); margin-right:6px}
+.pace-zone .rpe{color:var(--muted); font-size:11px; margin-left:6px}
+.detail-notes{font-size:12.5px; color:#cfd8e3; line-height:1.65; background:#1a2940;
+  border-left:3px solid var(--sky); border-radius:6px; padding:10px 12px}
+.detail-prog{font-size:11.5px; color:var(--muted); font-family:ui-monospace,Menlo,Consolas,monospace;
+  background:#0d1525; padding:8px 12px; border-radius:6px; line-height:1.6; word-break:break-word}
+.detail-actions{display:flex; gap:10px; margin-top:18px; padding-top:14px; border-top:1px solid var(--line); flex-wrap:wrap}
+.detail-actions button{background:transparent; border:1px solid var(--line); color:var(--muted);
+  border-radius:7px; padding:9px 16px; font-size:13px; font-weight:600; cursor:pointer; transition:.15s}
+.detail-actions button:hover{border-color:var(--sky); color:var(--text)}
+.detail-status{font-size:13px; color:var(--muted); margin-left:auto; padding:9px 0}
+.detail-status.done{color:#7ddc9c}
+
+@media (max-width:1100px){
+  .cal{grid-template-columns:60px repeat(7,minmax(80px,1fr)) 60px; font-size:10px}
+  .cal .day{min-height:80px; font-size:10px}
+  .cal .day .sess .ck{flex-basis:11px; width:11px; height:11px}
+  .stats{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div>
+    <h1>Ironman 2026 — Training Plan <small>· May 25 → Sep 13 (16 weeks)</small></h1>
+    <div style="margin-top:8px">
+      <span class="race-pill">🏁 RACE: Sun Sep 13, 2026</span>
+      <span class="ro-pill">👁 Read-only shared view</span>
+    </div>
+  </div>
+  <div class="countdown">
+    <div style="text-align:center"><div class="num" id="cd-days">—</div><div class="lbl">Days to race</div></div>
+    <div style="text-align:center"><div class="num" id="cd-wk" style="color:var(--steel)">—</div><div class="lbl">Plan week</div></div>
+  </div>
+</header>
+
+<div class="stats">
+  <div class="stat"><div class="val">16</div><div class="lbl">Weeks · 4 mesocycles</div><div class="sub">3 build / 1 recover</div></div>
+  <div class="stat"><div class="val" id="stat-total">—</div><div class="lbl">Total planned hours</div><div class="sub">excluding strength &amp; race day</div></div>
+  <div class="stat">
+    <div class="val" id="stat-ae-pct">—</div>
+    <div class="lbl">Plan-wide intensity mix</div>
+    <div class="dist-bar" id="overall-bar"></div>
+    <div class="dist-line"><span><strong style="color:var(--ae)">AE</strong> <span id="stat-ae">—</span></span><span><strong style="color:var(--rec)">REC</strong> <span id="stat-rec">—</span></span><span><strong style="color:var(--thr)">THR</strong> <span id="stat-thr">—</span></span></div>
+  </div>
+  <div class="stat"><div class="val" style="color:var(--race)">140.6</div><div class="lbl">Race distance (mi)</div><div class="sub">2.4 swim · 112 bike · 26.2 run</div></div>
+</div>
+
+<div class="section">
+  <h2><span class="dot"></span>Phase timeline</h2>
+  <div class="timeline">
+    <div class="timeline-block tl-b1">Block 1 · Foundation<div class="sub">W01–W04 · May 25 → Jun 21</div></div>
+    <div class="timeline-block tl-b2">Block 2 · Endurance Build<div class="sub">W05–W08 · Jun 22 → Jul 19</div></div>
+    <div class="timeline-block tl-b3">Block 3 · Race-Specific<div class="sub">W09–W12 · Jul 20 → Aug 16</div></div>
+    <div class="timeline-block tl-b4">Block 4 · Taper<div class="sub">W13–W16 · Aug 17 → Sep 13</div></div>
+    <div class="timeline-block tl-race">🏁<div class="sub">9/13</div></div>
+  </div>
+  <div class="legend">
+    <span><span class="sw" style="background:var(--ae)"></span>Aerobic Endurance (target 70%)</span>
+    <span><span class="sw" style="background:var(--rec)"></span>Recovery (target 10%)</span>
+    <span><span class="sw" style="background:var(--thr)"></span>Threshold/Tempo/Interval (target 20%)</span>
+    <span><span class="sw" style="background:var(--str)"></span>Strength (excluded from %)</span>
+    <span><span class="sw-rest"></span>Rest day</span>
+  </div>
+</div>
+
+<div class="section">
+  <h2><span class="dot"></span>Weekly volume by intensity</h2>
+  <div class="chart-wrap"><canvas id="volChart"></canvas></div>
+</div>
+
+<div class="section">
+  <h2><span class="dot"></span>Calendar · 16-week daily plan <span class="hint">Click any workout for its detailed structure</span></h2>
+  <div class="progress-wrap">
+    <div class="progress-top">
+      <div class="progress-label">Workouts completed: <strong id="prog-done">0</strong> <span style="color:var(--muted); font-weight:400">of <span id="prog-total">0</span></span></div>
+      <div class="progress-pct" id="prog-pct">0%</div>
+      <div class="updated-tag" id="updated-tag"></div>
+    </div>
+    <div class="progress-track"><div class="progress-fill" id="prog-fill"></div></div>
+  </div>
+  <div class="callout">
+    <strong>Reading the calendar:</strong> each session has a colored left bar for its <strong>effort type</strong> —
+    <span style="color:#86d49d">■ green = Aerobic Endurance</span> ·
+    <span style="color:#c8d3e0">■ slate = Recovery</span> ·
+    <span style="color:#f4c896">■ orange = Threshold/Tempo/Interval</span> ·
+    <span style="color:#d9c4f0">■ purple = Strength</span>.
+    <br>A <strong style="color:#7ddc9c">filled green ✓</strong> marks a completed workout. <strong>Click any workout</strong> for its full structure, pace/power targets, intervals, and notes. This is a read-only view that refreshes as training is logged.
+  </div>
+  <div class="cal" id="calendar" style="margin-top:14px"></div>
+</div>
+
+<div class="section">
+  <h2><span class="dot"></span>Workout library — structure &amp; progression</h2>
+  <div style="font-size:13px; color:var(--muted); margin-bottom:14px">
+    Each named workout in the calendar follows one of these templates. Internal structure (warm-up → main set → cool-down) and the way intervals progress across the plan are spelled out here.
+  </div>
+  <div class="library" id="library"></div>
+</div>
+
+</div>
+
+<div class="modal" id="modal">
+  <div class="modal-card">
+    <span class="close-btn" onclick="closeModal()">×</span>
+    <h3 id="modal-title">—</h3>
+    <div class="meta" id="modal-meta">—</div>
+    <div id="modal-body"></div>
+  </div>
+</div>
+
+<script>
+const START = new Date(2026, 4, 25);
+const RACE  = new Date(2026, 8, 13);
+
+const PLAN = [
+  {block:"Block 1", phase:"Build 1", hours:10, days:[
+    [{d:"AM Bike 1h Z2 steady", m:60, e:"AE"}, {d:"PM Strength 30m", m:30, e:"STR"}],
+    [{d:"AM Aerobic Swim 2,500yd", m:30, e:"AE"}, {d:"PM Easy Run 25m Z1", m:25, e:"REC"}],
+    [{d:"AM Tempo Run 1h — 5×3m T", m:60, e:"THR"}],
+    [{d:"AM Recovery Swim 2,500yd", m:30, e:"REC"}, {d:"PM Mid-week Run 1h Z2", m:60, e:"AE"}],
+    [{d:"AM CSS Swim 2,500yd — 5×100", m:45, e:"THR"}],
+    [{d:"Long Bike 3h Z2", m:180, e:"AE"}],
+    [{d:"Long Run 1h15 Z2", m:75, e:"AE"}]
+  ]},
+  {block:"Block 1", phase:"Build 2 · rest Tue", hours:11, days:[
+    [{d:"AM Bike 1h — 4×6m Sweet Spot", m:60, e:"THR"}, {d:"PM Strength 30m", m:30, e:"STR"}],
+    [{d:"REST", m:0, e:"REST"}],
+    [{d:"AM Tempo Run 1h — 5×4m T", m:60, e:"THR"}],
+    [{d:"AM Recovery Swim 2,800yd", m:35, e:"REC"}, {d:"PM Mid-week Run 1h Z2", m:60, e:"AE"}],
+    [{d:"AM CSS Swim 2,500yd — 6×100", m:45, e:"THR"}],
+    [{d:"Long Bike 3h30 Z2", m:210, e:"AE"}],
+    [{d:"Long Run 1h30 Z2", m:90, e:"AE"}]
+  ]},
+  {block:"Block 1", phase:"Build 3 (peak)", hours:12, peak:true, days:[
+    [{d:"AM Bike 1h15 — 3×10m Threshold", m:75, e:"THR"}, {d:"PM Strength 30m", m:30, e:"STR"}],
+    [{d:"AM Aerobic Swim 2,500yd", m:30, e:"AE"}, {d:"PM Easy Run 30m Z1", m:30, e:"REC"}],
+    [{d:"AM Tempo Run 1h15 — 5×5m T", m:75, e:"THR"}],
+    [{d:"AM Recovery Swim 3,000yd", m:35, e:"REC"}, {d:"PM Mid-week Run 1h Z2", m:60, e:"AE"}],
+    [{d:"AM CSS Swim 2,800yd — 8×100", m:50, e:"THR"}],
+    [{d:"Long Bike 4h Z2 — 3×15m SS embed", m:240, e:"AE"}],
+    [{d:"Long Run 1h45 Z2", m:105, e:"AE"}]
+  ]},
+  {block:"Block 1", phase:"RECOVER", hours:6, recover:true, days:[
+    [{d:"AM Strength 30m", m:30, e:"STR"}],
+    [{d:"AM Recovery Swim 2,000yd", m:25, e:"REC"}, {d:"PM Easy Run 30m Z1", m:30, e:"REC"}],
+    [{d:"AM Easy Run 30m Z1", m:30, e:"REC"}],
+    [{d:"AM Recovery Swim 2,000yd", m:25, e:"REC"}, {d:"PM Easy Run 30m Z1", m:30, e:"REC"}],
+    [{d:"REST", m:0, e:"REST"}],
+    [{d:"Bike 2h Z2", m:120, e:"AE"}],
+    [{d:"Easy Run 45m Z1", m:45, e:"REC"}]
+  ]},
+  {block:"Block 2", phase:"Build 1", hours:12, days:[
+    [{d:"AM Easy Run 45m Z2", m:45, e:"AE"}, {d:"PM Strength 30m", m:30, e:"STR"}],
+    [{d:"AM Bike 1h15 — 4×8m Threshold", m:75, e:"THR"}],
+    [{d:"AM Tempo Run 1h — 4×6m T", m:60, e:"THR"}],
+    [{d:"AM Recovery Swim 3,000yd", m:35, e:"REC"}, {d:"PM Mid-week Run 1h Z2", m:60, e:"AE"}],
+    [{d:"AM CSS Swim 2,500yd — 4×200", m:45, e:"THR"}],
+    [{d:"Long Bike 4h Z2", m:240, e:"AE"}, {d:"Brick Run 20m Z2", m:20, e:"AE"}],
+    [{d:"AM OW Recovery Swim 2,500yd", m:45, e:"REC"}, {d:"Long Run 1h30 Z2", m:90, e:"AE"}]
+  ]},
+  {block:"Block 2", phase:"Build 2 · rest Mon", hours:13, days:[
+    [{d:"REST", m:0, e:"REST"}],
+    [{d:"AM Bike 1h30 — 3×12m Threshold", m:90, e:"THR"}, {d:"PM Strength 30m (W6 exception)", m:30, e:"STR"}],
+    [{d:"AM Tempo Run 1h15 — 4×8m T", m:75, e:"THR"}],
+    [{d:"AM Recovery Swim 3,000yd", m:35, e:"REC"}, {d:"PM Mid-week Run 1h Z2", m:60, e:"AE"}],
+    [{d:"AM CSS Swim 2,800yd — 5×200", m:50, e:"THR"}],
+    [{d:"Long Bike 4h Z2", m:240, e:"AE"}, {d:"Brick Run 25m Z2", m:25, e:"AE"}],
+    [{d:"AM OW Recovery Swim 2,500yd", m:45, e:"REC"}, {d:"Long Run 1h45 Z2", m:105, e:"AE"}]
+  ]},
+  {block:"Block 2", phase:"Build 3 (peak)", hours:14, peak:true, days:[
+    [{d:"AM Easy Run 30m Z1", m:30, e:"REC"}, {d:"PM Strength 30m", m:30, e:"STR"}],
+    [{d:"AM Bike 1h30 — 4×12m Sweet Spot", m:90, e:"THR"}],
+    [{d:"AM Threshold Run 1h15 — 3×10m Threshold", m:75, e:"THR"}],
+    [{d:"AM Recovery Swim 3,000yd", m:35, e:"REC"}, {d:"PM Mid-week Run 1h Z2", m:60, e:"AE"}],
+    [{d:"AM CSS Swim 2,800yd — 4×300", m:50, e:"THR"}],
+    [{d:"Long Bike 4h30 Z2", m:270, e:"AE"}, {d:"Brick Run 30m Z2", m:30, e:"AE"}],
+    [{d:"AM OW Recovery Swim 2,800yd", m:50, e:"REC"}, {d:"Long Run 1h45 Z2", m:105, e:"AE"}]
+  ]},
+  {block:"Block 2", phase:"RECOVER", hours:7, recover:true, days:[
+    [{d:"AM Easy Run 30m Z1", m:30, e:"REC"}, {d:"PM Strength 30m", m:30, e:"STR"}],
+    [{d:"REST", m:0, e:"REST"}],
+    [{d:"AM Easy Run 45m Z2", m:45, e:"AE"}],
+    [{d:"AM Recovery Swim 2,200yd", m:30, e:"REC"}, {d:"PM Easy Run 30m Z1", m:30, e:"REC"}],
+    [{d:"AM Technique Swim 2,200yd", m:35, e:"REC"}],
+    [{d:"Bike 2h30 Z2", m:150, e:"AE"}],
+    [{d:"Easy Run 1h Z2", m:60, e:"AE"}]
+  ]},
+  {block:"Block 3", phase:"Build 1", hours:13, days:[
+    [{d:"AM Easy Run 30m Z1", m:30, e:"REC"}],
+    [{d:"AM Bike 1h30 — Desc. Threshold 9/7/5", m:90, e:"THR"}],
+    [{d:"AM Race-pace Run 1h — 4×5m @RP", m:60, e:"THR"}],
+    [{d:"AM Recovery Swim 2,800yd", m:35, e:"REC"}, {d:"PM Mid-week Long Run 1h15 Z2", m:75, e:"AE"}],
+    [{d:"AM CSS Swim 2,500yd — 4×400", m:45, e:"THR"}],
+    [{d:"Long Bike 4h30 race-pace Z2", m:270, e:"AE"}, {d:"Brick Run 30m @RP", m:30, e:"THR"}],
+    [{d:"AM OW Recovery Swim 2,800yd", m:50, e:"REC"}, {d:"Long Run 2h Z2", m:120, e:"AE"}]
+  ]},
+  {block:"Block 3", phase:"Build 2 · rest Mon", hours:14, days:[
+    [{d:"REST", m:0, e:"REST"}],
+    [{d:"AM Bike 1h45 — 3×15m Threshold", m:105, e:"THR"}],
+    [{d:"AM Race-pace Run 1h15 — 2×20m @RP", m:75, e:"THR"}],
+    [{d:"AM Recovery Swim 3,000yd", m:35, e:"REC"}, {d:"PM Mid-week Long Run 1h30 Z2", m:90, e:"AE"}],
+    [{d:"AM CSS Swim 2,800yd — 4×400", m:50, e:"THR"}],
+    [{d:"Long Bike 5h race-pace Z2", m:300, e:"AE"}, {d:"Brick Run 30m @RP", m:30, e:"THR"}],
+    [{d:"Long Run 2h15 Z2", m:135, e:"AE"}]
+  ]},
+  {block:"Block 3", phase:"🎯 PLAN PEAK", hours:14, peak:true, days:[
+    [{d:"AM Recovery Swim 2,000yd", m:30, e:"REC"}, {d:"PM Easy Run 30m Z1", m:30, e:"REC"}],
+    [{d:"AM Bike 1h Z2 (legs save)", m:60, e:"AE"}],
+    [{d:"AM Race-pace Run 45m primer", m:45, e:"THR"}],
+    [{d:"AM Recovery Swim 2,500yd", m:30, e:"REC"}, {d:"PM Easy Run 30m Z1", m:30, e:"REC"}],
+    [{d:"AM CSS Swim 2,000yd — short tune-up", m:35, e:"THR"}],
+    [{d:"🎯 Long Bike 5h Z2 (race rehearsal)", m:300, e:"AE"}, {d:"🎯 Brick Run 1h @RP", m:60, e:"THR"}],
+    [{d:"🎯 Long Run 3h / 22mi Z2", m:180, e:"AE"}]
+  ]},
+  {block:"Block 3", phase:"RECOVER", hours:8, recover:true, days:[
+    [{d:"AM Easy Run 40m Z2", m:40, e:"AE"}],
+    [{d:"REST", m:0, e:"REST"}],
+    [{d:"AM Easy Run 50m Z2", m:50, e:"AE"}],
+    [{d:"AM Recovery Swim 2,500yd", m:30, e:"REC"}, {d:"PM Easy Run 30m Z1", m:30, e:"REC"}],
+    [{d:"AM Technique Swim 2,000yd", m:30, e:"REC"}],
+    [{d:"Bike 2h30 Z2", m:150, e:"AE"}, {d:"Brick Run 20m Z2", m:20, e:"AE"}],
+    [{d:"Easy Run 1h15 Z2", m:75, e:"AE"}]
+  ]},
+  {block:"Block 4", phase:"Race-specific sharpen", hours:12, taper:true, days:[
+    [{d:"AM Easy Run 45m Z2", m:45, e:"AE"}],
+    [{d:"AM Bike 1h30 — 3×15m Race-pace", m:90, e:"THR"}],
+    [{d:"AM Race-pace Run 1h — 3×10m @RP", m:60, e:"THR"}],
+    [{d:"AM Recovery Swim 2,800yd", m:35, e:"REC"}, {d:"PM Easy Run 30m Z1", m:30, e:"REC"}],
+    [{d:"AM CSS Swim 2,500yd — tune-up", m:45, e:"THR"}],
+    [{d:"Bike 3h30 race-pace Z2", m:210, e:"AE"}, {d:"Brick Run 30m @RP", m:30, e:"THR"}],
+    [{d:"AM OW Recovery Swim 2,500yd", m:45, e:"REC"}, {d:"Long Run 1h45 Z2 (LAST LONG)", m:105, e:"AE"}]
+  ]},
+  {block:"Block 4", phase:"Taper 1 · rest Mon", hours:10, taper:true, days:[
+    [{d:"REST", m:0, e:"REST"}],
+    [{d:"AM Bike 1h15 — 3×10m Race-pace", m:75, e:"THR"}],
+    [{d:"AM Race-pace Run 1h — 2×15m @RP", m:60, e:"THR"}],
+    [{d:"AM Recovery Swim 2,500yd", m:35, e:"REC"}, {d:"PM Easy Run 45m Z2", m:45, e:"AE"}],
+    [{d:"AM CSS Swim 2,500yd — tune-up", m:45, e:"THR"}],
+    [{d:"Bike 3h race-pace Z2", m:180, e:"AE"}, {d:"Brick Run 30m @RP", m:30, e:"THR"}],
+    [{d:"Long Run 1h30 Z2", m:90, e:"AE"}]
+  ]},
+  {block:"Block 4", phase:"Taper 2", hours:7, taper:true, days:[
+    [{d:"AM Easy Run 30m Z2", m:30, e:"AE"}],
+    [{d:"AM Bike 1h15 — 2×10m Race-pace", m:75, e:"THR"}],
+    [{d:"AM Race-pace Run 1h — 2×10m @RP", m:60, e:"THR"}],
+    [{d:"AM Recovery Swim 2,000yd", m:30, e:"REC"}, {d:"PM Easy Run 25m Z1", m:25, e:"REC"}],
+    [{d:"AM CSS Swim 1,500yd — short tune", m:30, e:"THR"}],
+    [{d:"Bike 1h45 race-pace primer", m:105, e:"AE"}],
+    [{d:"Easy Run 45m Z2 + 4×30s pickups", m:45, e:"AE"}]
+  ]},
+  {block:"Block 4", phase:"🏁 RACE WEEK", hours:4, race:true, days:[
+    [{d:"AM Recovery Swim 1,500yd", m:25, e:"REC"}, {d:"PM Easy Run 30m Z1", m:30, e:"REC"}],
+    [{d:"AM Aerobic Swim 1,200yd OW/pool loosen", m:25, e:"AE"}],
+    [{d:"AM Easy Bike 45m + 4×30s @RP", m:45, e:"AE"}],
+    [{d:"AM Easy Run 20m + 4×30s strides", m:20, e:"REC"}],
+    [{d:"REST (travel/gear check)", m:0, e:"REST"}],
+    [{d:"AM Swim 800yd OW shakeout + Easy Run 15m", m:30, e:"REC"}],
+    [{d:"🏁 IRONMAN RACE DAY 🏁", m:0, e:"RACE"}]
+  ]}
+];
+
+const LIBRARY = [
+  {name:"Long Bike Z2", effort:"AE", structure:"15m WU @ Z1→Z2 (build) → main set @ Z2 (70-75% FTP, 182-195W, RPE 4-5, can hold full sentences) → 10m CD",
+   progression:"W1: 3h | W2: 3h30 | W3: 4h | W5: 4h | W6: 4h | W7: 4h30 | W11: 5h (race rehearsal — peak)"},
+  {name:"Long Bike Race-Pace", effort:"AE", structure:"15m WU → main sustained @ IM race target (70-78% FTP, 182-203W, RPE 5-6) → 10m CD. Practice nutrition every 20m.",
+   progression:"W9: 4h30 | W10: 5h | W13: 3h30 | W14: 3h"},
+  {name:"Long Run Z2", effort:"AE", structure:"10m WU walk/jog → main @ Z2 (8:45-9:15/mi, RPE 5) → 5m walk CD. Practice race nutrition.",
+   progression:"W1: 1h15 | W2: 1h30 | W3: 1h45 | W5: 1h30 | W6-W7: 1h45 | W9: 2h | W10: 2h15 | W11: 3h / 22 mi (peak) | W13: 1h45 (final long)"},
+  {name:"Mid-week Run Z2", effort:"AE", structure:"10m WU → Z2 steady (8:45-9:15/mi) → 5m CD. Run on tired legs (next day after intense Wed run).",
+   progression:"W1-W7: 1h | W9: 1h15 | W10: 1h30"},
+  {name:"Aerobic Swim", effort:"AE", structure:"300yd WU mixed → 4×50 drills (10s rest) → main 6-10×200yd @ CSS+15s (15-20s rest) → 200yd CD",
+   progression:"Used Tue PM in W1, W3 only (when Mon bike was light enough). Builds aerobic capacity without quality stress."},
+  {name:"Brick Run Z2 (off bike)", effort:"AE", structure:"Off bike, transition <2m, run @ Z2 (8:45-9:15/mi). Focus on running mechanics under fatigue.",
+   progression:"W5: 20m | W6: 25m | W7: 30m | W12 recover: 20m"},
+  {name:"Easy Run Z1", effort:"REC", structure:"Walk WU 3-5m → conversational Z1 jog (9:30+/mi, RPE 2-3) → walk CD. Lower body unloaded.",
+   progression:"Used Mon/Tue/Thu PM. Static 20-45m."},
+  {name:"Recovery Swim", effort:"REC", structure:"200yd WU easy → 4-6×50 drills (10s rest) → 200-400yd easy aerobic @ CSS+20s → 200yd CD. NO interval work — purely flush.",
+   progression:"Static 2,000-3,000yd. Placed only after intense run/bike days."},
+  {name:"Technique Swim", effort:"REC", structure:"200yd WU → 8×50 drills (catch-up, single-arm, fingertip drag, fist) 15s rest → 400yd easy → 200yd CD",
+   progression:"Recovery weeks only (W4, W8). Drill-focused 2,000-2,500yd."},
+  {name:"OW Recovery Swim", effort:"REC", structure:"5m easy → continuous aerobic with sighting practice every 6-8 strokes → easy CD. No intervals.",
+   progression:"Block 2+ Sunday mornings: 2,500-3,500yd. Race-week shakeout: 800yd."},
+  {name:"Tempo Run", effort:"THR", structure:"15m WU jog → N×Mmin @ tempo pace (8:15-8:45/mi, RPE 7) w/ 1m easy between → 10m CD",
+   progression:"W1: 5×3m | W2: 5×4m | W3: 5×5m | W5: 4×6m | W6: 4×8m"},
+  {name:"Threshold Run", effort:"THR", structure:"15m WU → N×Mmin @ threshold (7:50-8:10/mi, RPE 8) w/ 2m easy → 10m CD",
+   progression:"W7: 3×10m"},
+  {name:"Race-pace Run", effort:"THR", structure:"15m WU → N×Mmin @ IM goal pace (8:30-8:45/mi, RPE 6-7) → 10m CD",
+   progression:"W9: 4×5m | W10: 2×20m | W11: 45m primer (short) | W13: 3×10m | W14: 2×15m | W15: 2×10m"},
+  {name:"Sweet Spot Bike", effort:"THR", structure:"15m WU build → N×Mmin @ 88-94% FTP (229-244W, RPE 7) w/ 5m easy → 10m CD",
+   progression:"W2: 4×6m | W7: 4×12m"},
+  {name:"Threshold Bike", effort:"THR", structure:"15m WU → N×Mmin @ 95-100% FTP (247-260W, RPE 8) w/ 3-5m easy → 10m CD",
+   progression:"W3: 3×10m | W5: 4×8m | W6: 3×12m | W10: 3×15m"},
+  {name:"Desc. Threshold 9/7/5", effort:"THR", structure:"15m WU → 9m @ ~95% FTP → 1m easy → 7m @ ~98% → 1m easy → 5m @ ~100% → 10m CD",
+   progression:"W9 once — a race-specific intro to descending intervals."},
+  {name:"Race-pace Bike Intervals", effort:"THR", structure:"15m WU → N×Mmin @ 80-85% FTP (208-221W, RPE 6-7) w/ 3-5m easy → 10m CD",
+   progression:"W13: 3×15m | W14: 3×10m | W15: 2×10m"},
+  {name:"CSS Swim", effort:"THR", structure:"300yd WU + 4×50 drills → main @ CSS (1:35/100yd, 10-15s rest) → 200yd CD",
+   progression:"W1: 5×100 | W2: 6×100 | W3: 8×100 | W5: 4×200 | W6: 5×200 | W7: 4×300 | W9-10: 4×400 | W11: 4×200 (short) | W13-W15: tune-up volumes"},
+  {name:"Brick Run @RP (off bike)", effort:"THR", structure:"Off bike, transition <2m, run @ IM goal pace (8:30-8:45/mi). Race-day simulation of run-off-bike legs.",
+   progression:"W9: 30m | W10: 30m | W11: 60m (peak — race rehearsal!) | W13: 30m | W14: 30m"},
+  {name:"Strength (30m)", effort:"STR", structure:"5m mobility → 3 rounds of triathlon-specific compound lifts (goblet squat / single-leg deadlift / push-up / row) + core circuit (plank / dead bug / side plank) → CD stretch",
+   progression:"W1-W8 only, Monday PM (W6 exception: Tue PM). Drops out W9 onwards so race-specific block stays sport-focused."}
+];
+
+const ZONES = {
+  run: {
+    Z1:     {label:"Z1 (Easy)",      val:"9:30-10:00/mi", rpe:"RPE 2-3"},
+    Z2:     {label:"Z2 (Aerobic)",   val:"8:45-9:00/mi",  rpe:"RPE 4-5"},
+    Tempo:  {label:"Tempo",          val:"8:15-8:45/mi",  rpe:"RPE 7"},
+    Z4:     {label:"Z4 (Threshold)", val:"7:45-8:10/mi",  rpe:"RPE 8"},
+    RP:     {label:"Race-pace",      val:"8:30-8:45/mi",  rpe:"RPE 6-7"},
+    Stride: {label:"Stride",         val:"6:30-7:00/mi",  rpe:"fast/smooth"},
+    Walk:   {label:"Walk",           val:"~17:00/mi",     rpe:"recovery"}
+  },
+  bike: {
+    Z1:        {label:"Z1 (Easy)",     val:"<143 W (<55% FTP)",       rpe:"RPE 2-3"},
+    Z2:        {label:"Z2 (Aerobic)",  val:"143-195 W (55-75% FTP)",  rpe:"RPE 4-5"},
+    SS:        {label:"Sweet Spot",    val:"229-244 W (88-94% FTP)",  rpe:"RPE 7"},
+    Threshold: {label:"Threshold",     val:"247-260 W (95-100% FTP)", rpe:"RPE 8"},
+    RP:        {label:"Race-pace",     val:"208-221 W (80-85% FTP)",  rpe:"RPE 6-7"},
+    FTP:       {label:"FTP",           val:"260 W",                   rpe:""}
+  },
+  swim: {
+    CSS:       {label:"CSS",      val:"1:35/100yd", rpe:"threshold"},
+    "CSS+10s": {label:"CSS+10s",  val:"1:45/100yd", rpe:"aerobic"},
+    "CSS+15s": {label:"CSS+15s",  val:"1:50/100yd", rpe:"aerobic"},
+    "CSS+20s": {label:"CSS+20s",  val:"1:55/100yd", rpe:"easy"},
+    "CSS+25s": {label:"CSS+25s",  val:"2:00/100yd", rpe:"recovery"}
+  }
+};
+
+const TEMPLATES = {
+  long_bike_z2: {name:"Long Aerobic Endurance Bike", type:"AE", sport:"bike",
+    blocks:[
+      {label:"Warm-up", time:"~15 min", what:"Easy spin building Z1 → Z2", target:"130 → 180 W (50 → 70% FTP), 80-90 rpm"},
+      {label:"Main set", time:"bulk", what:"Steady Z2 aerobic", target:"170-187 W (65-72% FTP), ~180 W avg · should be able to hold full sentences"},
+      {label:"Cool-down", time:"10-15 min", what:"Easy spin", target:"120-140 W (~50% FTP)"}
+    ], zones:["Z1","Z2","FTP"],
+    notes:"Bread-and-butter aerobic builder. If it feels hard, the pace is too high. Cadence 80-90 rpm. Nutrition 60-80 g carbs/hr, sodium 600-800 mg/hr, sip every 10-15 min.",
+    progression:"W1: 3h | W2: 3h30 | W3: 4h | W5: 4h | W6: 4h | W7: 4h30 | W11: 5h (race rehearsal — peak)"},
+  long_bike_race_pace: {name:"Long Bike Race-Pace", type:"AE", sport:"bike",
+    blocks:[
+      {label:"Warm-up", time:"~15 min", what:"Build Z1 → Z2, settle onto aerobars", target:"end at ~180 W (70% FTP)"},
+      {label:"Main set", time:"bulk", what:"Sustained at IM target intensity", target:"182-203 W (70-78% FTP), RPE 5-6, smooth cadence 85-90 rpm"},
+      {label:"Cool-down", time:"~10 min", what:"Easy spin out of aerobars", target:"120-140 W"}
+    ], zones:["Z2","RP","FTP"],
+    notes:"Race-day rehearsal — be in your race kit and on aerobars. Practice nutrition every 25-30 min.",
+    progression:"W9: 4h30 | W10: 5h | W13: 3h30 | W14: 3h | W15: 1h45 (primer)"},
+  aerobic_bike: {name:"Aerobic Endurance Bike", type:"AE", sport:"bike",
+    blocks:[
+      {label:"Warm-up", time:"~5-10 min", what:"Easy spin into Z2", target:"130-160 W"},
+      {label:"Main set", time:"bulk", what:"Steady Z2", target:"170-187 W (65-72% FTP), 80-90 rpm"},
+      {label:"Cool-down", time:"~5 min", what:"Easy spin", target:"110-130 W"}
+    ], zones:["Z1","Z2","FTP"],
+    notes:"Same Z2 effort as the long ride, just shorter. Keep it smooth — this is volume, not intensity."},
+  sweet_spot_bike: {name:"Sweet Spot Bike", type:"THR", sport:"bike",
+    blocks:[
+      {label:"Warm-up", time:"~12-15 min", what:"Build Z1 → Z2 + 3 × (30s spin-up at 100 rpm / 30s easy)", target:"finish at 150-180 W, legs primed"},
+      {label:"Main set", time:"intervals", what:"N × 6-12 min @ Sweet Spot, 3-5 min easy spin between", target:"229-244 W (88-94% FTP), cadence 85-95 rpm, RPE 7"},
+      {label:"Cool-down", time:"~10 min", what:"Easy spin out", target:"100-130 W"}
+    ], zones:["Z2","SS","FTP"],
+    notes:"Highest-return work for Ironman — sustainably hard. Stay seated, smooth cadence. If you can't hold the lower end on rep 2 or 3, cut the workout.",
+    progression:"W2: 4×6m | W7: 4×12m"},
+  threshold_bike: {name:"Threshold Bike", type:"THR", sport:"bike",
+    blocks:[
+      {label:"Warm-up", time:"~15 min", what:"Z1 → Z2 + 2 × (1 min @ 90% FTP / 2 min easy) activations", target:"primed for FTP work"},
+      {label:"Main set", time:"intervals", what:"N × 8-15 min @ Threshold, 3-5 min easy between", target:"247-260 W (95-100% FTP), RPE 8, cadence 85-95 rpm"},
+      {label:"Cool-down", time:"~10 min", what:"Easy spin", target:"110-130 W"}
+    ], zones:["Z2","SS","Threshold","FTP"],
+    notes:"Top end of sustainable. RPE 8 — focused, hard, but not flat-out. Pacing on rep 1 should equal rep N.",
+    progression:"W3: 3×10m | W5: 4×8m | W6: 3×12m | W10: 3×15m"},
+  desc_threshold_bike: {name:"Descending Threshold 9/7/5", type:"THR", sport:"bike",
+    blocks:[
+      {label:"Warm-up", time:"~15 min", what:"Z1 → Z2 + activations", target:"primed"},
+      {label:"Block 1", time:"9 min", what:"@ ~95% FTP", target:"~247 W"},
+      {label:"Recovery", time:"1 min", what:"Easy spin", target:"easy"},
+      {label:"Block 2", time:"7 min", what:"@ ~98% FTP", target:"~255 W"},
+      {label:"Recovery", time:"1 min", what:"Easy spin", target:"easy"},
+      {label:"Block 3", time:"5 min", what:"@ ~100% FTP (FTP itself)", target:"~260 W"},
+      {label:"Cool-down", time:"~10 min", what:"Easy spin", target:"easy"}
+    ], zones:["SS","Threshold","FTP"],
+    notes:"Descending duration, ascending intensity — finish strong. Race-specific rehearsal of negative-splitting under fatigue.",
+    progression:"W9 once — race-specific intro to descending intervals."},
+  race_pace_bike: {name:"Race-Pace Bike Intervals", type:"THR", sport:"bike",
+    blocks:[
+      {label:"Warm-up", time:"~15 min", what:"Z1 → Z2, get into aerobars", target:"end at race-pace zone"},
+      {label:"Main set", time:"intervals", what:"N × 10-15 min @ Race-pace, 3-5 min easy", target:"208-221 W (80-85% FTP), cadence 85-90 rpm, RPE 6-7"},
+      {label:"Cool-down", time:"~10 min", what:"Easy spin", target:"easy"}
+    ], zones:["Z2","RP","SS","FTP"],
+    notes:"The pace and effort you want to hold the IM bike at. Aerobars on if outdoors. Quality of pacing > quality of effort.",
+    progression:"W13: 3×15m | W14: 3×10m | W15: 2×10m"},
+  long_run_z2: {name:"Long Run Z2", type:"AE", sport:"run",
+    blocks:[
+      {label:"Warm-up", time:"~10-12 min", what:"Walk-jog build to Z2", target:"finish at 8:45-9:00/mi"},
+      {label:"Main set", time:"bulk", what:"Steady Z2 aerobic", target:"8:45-9:15/mi · RPE 5 · breathable"},
+      {label:"Cool-down", time:"~5 min", what:"Easy → walk", target:"9:30+/mi → walk"}
+    ], zones:["Z1","Z2","RP"],
+    notes:"Pick a flatter route — the IM run is rolling. Practice race nutrition every 25-30 min.",
+    progression:"W1: 1h15 | W2: 1h30 | W3: 1h45 | W5: 1h30 | W6-7: 1h45 | W9: 2h | W10: 2h15 | W11: 3h / 22 mi (peak) | W13: 1h45 (final long)"},
+  midweek_long_run: {name:"Mid-week Long Run", type:"AE", sport:"run",
+    blocks:[
+      {label:"Warm-up", time:"~10 min", what:"Easy build to Z2", target:"8:45-9:00/mi"},
+      {label:"Main set", time:"bulk", what:"Steady Z2", target:"8:45-9:15/mi · RPE 5"},
+      {label:"Cool-down", time:"~5 min", what:"Easy → walk", target:"9:30+/mi"}
+    ], zones:["Z1","Z2"],
+    notes:"Longer mid-week run, day after a tempo/threshold workout — legs may feel heavy. That's the point: aerobic on tired legs."},
+  midweek_run_z2: {name:"Mid-week Endurance Run", type:"AE", sport:"run",
+    blocks:[
+      {label:"Warm-up", time:"~10 min", what:"Easy Z1 → Z2", target:"build to 8:45-9:00/mi"},
+      {label:"Main set", time:"~45 min", what:"Steady Z2", target:"8:45-9:00/mi · RPE 4-5"},
+      {label:"Cool-down", time:"~5 min", what:"Easy → walk", target:"easy"}
+    ], zones:["Z1","Z2"],
+    notes:"Bread-and-butter aerobic. Should feel conversational throughout."},
+  tempo_run: {name:"Tempo Run", type:"THR", sport:"run",
+    blocks:[
+      {label:"Warm-up", time:"~12 min", what:"Z2 easy build", target:"8:45-9:00/mi"},
+      {label:"Strides", time:"4 × 30s", what:"Fast smooth strides w/ 30s walk-back between", target:"6:30-7:00/mi"},
+      {label:"Main set", time:"intervals", what:"N × 3-8 min @ Tempo, 1-2 min easy between", target:"8:15-8:45/mi · RPE 7 · controlled-hard"},
+      {label:"Cool-down", time:"~10 min", what:"Easy Z1 jog → walk", target:"9:30+/mi"}
+    ], zones:["Z1","Z2","Tempo","Stride"],
+    notes:"Tempo = 'comfortably hard'. Sustainable but not chatty. Form stays clean — if it doesn't, ease off.",
+    progression:"W1: 5×3m | W2: 5×4m | W3: 5×5m | W5: 4×6m | W6: 4×8m"},
+  threshold_run: {name:"Threshold Run", type:"THR", sport:"run",
+    blocks:[
+      {label:"Warm-up", time:"~15 min", what:"Z2 easy + 4 × 30s strides", target:"primed"},
+      {label:"Main set", time:"intervals", what:"N × 8-12 min @ Threshold, 2 min easy between", target:"7:50-8:10/mi · RPE 8 · focused-hard"},
+      {label:"Cool-down", time:"~10 min", what:"Easy Z1 jog → walk", target:"9:30+/mi"}
+    ], zones:["Z2","Tempo","Z4","Stride"],
+    notes:"Harder than tempo. Mental focus required. If form breaks, ease off rather than push through.",
+    progression:"W7: 3×10m"},
+  race_pace_run: {name:"Race-Pace Run", type:"THR", sport:"run",
+    blocks:[
+      {label:"Warm-up", time:"~15 min", what:"Z2 easy build", target:"8:45-9:00/mi"},
+      {label:"Main set", time:"intervals", what:"N × Mmin @ Race-pace (IM goal)", target:"8:30-8:45/mi · RPE 6-7"},
+      {label:"Cool-down", time:"~10 min", what:"Easy Z1 → walk", target:"easy"}
+    ], zones:["Z2","RP","Tempo"],
+    notes:"The pace you'll target on race day. The goal is to learn what 8:30-8:45/mi feels like with conviction.",
+    progression:"W9: 4×5m | W10: 2×20m | W11: 45m primer | W13: 3×10m | W14: 2×15m | W15: 2×10m"},
+  easy_run_z2: {name:"Easy Run Z2", type:"AE", sport:"run",
+    blocks:[
+      {label:"Warm-up", time:"~5 min", what:"Easy jog", target:"9:00-9:30/mi"},
+      {label:"Main set", time:"bulk", what:"Z2 aerobic", target:"8:45-9:00/mi"},
+      {label:"Cool-down", time:"~3 min", what:"Walk", target:"walk"}
+    ], zones:["Z1","Z2"],
+    notes:"Short aerobic run. Don't dawdle — Z2 means Z2."},
+  easy_run_z1: {name:"Easy Run · Recovery (Z1)", type:"REC", sport:"run",
+    blocks:[
+      {label:"Warm-up", time:"3-5 min", what:"Brisk walk", target:"~17:00/mi"},
+      {label:"Main set", time:"bulk", what:"Conversational Z1 jog", target:"9:30+/mi · RPE 2-3"},
+      {label:"Cool-down", time:"~2 min", what:"Walk", target:"walk"}
+    ], zones:["Walk","Z1"],
+    notes:"Truly easy. If your heart rate creeps up, slow down or walk. Goal is blood flow and movement, not training."},
+  brick_run_z2: {name:"Brick Run Z2 (off bike)", type:"AE", sport:"run",
+    blocks:[
+      {label:"Transition", time:"<2 min", what:"Off bike fast, change shoes, head out", target:"settle into stride"},
+      {label:"Main set", time:"bulk", what:"Z2 aerobic on tired legs", target:"8:45-9:15/mi · RPE 5-6 · focus mechanics"}
+    ], zones:["Z2","RP"],
+    notes:"Legs will feel heavy/slow for the first few minutes — that's normal. Smooth steady form. This is the adaptation.",
+    progression:"W5: 20m | W6: 25m | W7: 30m | W12: 20m"},
+  brick_run_rp: {name:"Brick Run @ Race-Pace", type:"THR", sport:"run",
+    blocks:[
+      {label:"Transition", time:"<2 min", what:"Off bike, fast change, go", target:"settle in"},
+      {label:"Main set", time:"bulk", what:"@ IM goal pace on tired legs", target:"8:30-8:45/mi · RPE 6-7"}
+    ], zones:["Z2","RP"],
+    notes:"The single most race-specific session in the plan. If you can hold race-pace here on cooked legs, you can hold it on the day.",
+    progression:"W9: 30m | W10: 30m | W11: 60m (peak — race rehearsal) | W13: 30m | W14: 30m"},
+  aerobic_swim: {name:"Aerobic Swim", type:"AE", sport:"swim",
+    blocks:[
+      {label:"Warm-up", time:"400 yd", what:"200 free easy + 100 choice + 100 kick", target:"CSS+20 to +25"},
+      {label:"Drills", time:"4 × 50", what:"Choice (catch-up / fingertip / 6-3-6) w/ 10s rest", target:"smooth"},
+      {label:"Main set", time:"6-10 × 200 yd", what:"@ CSS+15s w/ 15-20s rest", target:"1:50/100yd"},
+      {label:"Cool-down", time:"200 yd", what:"Easy swim", target:"CSS+20"}
+    ], zones:["CSS","CSS+15s","CSS+20s"],
+    notes:"Aerobic capacity. Should feel like 'work' but not 'fight'. Long pulls, breath every 3-5 strokes."},
+  recovery_swim: {name:"Recovery Swim", type:"REC", sport:"swim",
+    blocks:[
+      {label:"Warm-up", time:"200-400 yd", what:"Easy swim + mixed strokes", target:"CSS+25"},
+      {label:"Drills", time:"4-6 × 50", what:"Drill choice w/ 10s rest", target:"focus on form"},
+      {label:"Pull set", time:"6 × 100 yd", what:"@ CSS+10s, pull buoy", target:"1:45/100yd"},
+      {label:"Easy", time:"800 yd", what:"Continuous easy aerobic", target:"CSS+20"},
+      {label:"Cool-down", time:"200-400 yd", what:"Easy", target:"CSS+25"}
+    ], zones:["CSS+10s","CSS+15s","CSS+20s"],
+    notes:"No intervals — purely flush. Placed after intense run/bike days for active recovery."},
+  technique_swim: {name:"Technique Swim", type:"REC", sport:"swim",
+    blocks:[
+      {label:"Warm-up", time:"300 yd", what:"Mixed easy", target:"CSS+25"},
+      {label:"Drills", time:"8 × 50", what:"Catch-up, single-arm, fingertip drag, fist (2 each) w/ 15s rest", target:"slow, deliberate"},
+      {label:"Build", time:"400 yd", what:"Easy aerobic with drill focus", target:"CSS+15"},
+      {label:"Cool-down", time:"200 yd", what:"Easy", target:"CSS+25"}
+    ], zones:["CSS+15s","CSS+25s"],
+    notes:"Recovery weeks only (W4, W8). Focus on form — especially catch and body rotation. No quality work."},
+  ow_recovery_swim: {name:"Open-Water Recovery Swim", type:"REC", sport:"swim",
+    blocks:[
+      {label:"Warm-up", time:"~5 min", what:"Easy aerobic, adjust to water", target:"CSS+20"},
+      {label:"Main set", time:"bulk", what:"Continuous aerobic w/ sighting every 6-8 strokes", target:"CSS+15 to +20"},
+      {label:"Cool-down", time:"~5 min", what:"Easy", target:"easy"}
+    ], zones:["CSS+15s","CSS+20s"],
+    notes:"Wetsuit if you have one. Practice sighting and group swimming. If you can't swim with others, sight off landmarks every 6-8 strokes."},
+  css_swim: {name:"CSS Threshold Swim", type:"THR", sport:"swim",
+    blocks:[
+      {label:"Warm-up", time:"400 yd", what:"Easy build + mixed strokes", target:"CSS+25 → CSS+15"},
+      {label:"Drills", time:"4 × 50", what:"Drill choice w/ 10s rest", target:"form focus"},
+      {label:"Builds", time:"4 × 100 yd", what:"Descending pace (CSS+15 → CSS) w/ 10s rest", target:"finish strong"},
+      {label:"Main set", time:"N × 100-400 yd", what:"@ CSS w/ 10-15s rest", target:"1:35/100yd · threshold effort"},
+      {label:"Cool-down", time:"200-400 yd", what:"Easy", target:"CSS+25"}
+    ], zones:["CSS","CSS+10s","CSS+15s"],
+    notes:"CSS = critical swim speed = your swim threshold. Last rep should match the first — pace discipline matters.",
+    progression:"W1: 5×100 | W2: 6×100 | W3: 8×100 | W5: 4×200 | W6: 5×200 | W7: 4×300 | W9-10: 4×400 | W11: 4×200 | W13-15: tune-up"},
+  strength: {name:"Triathlon Strength (30 min)", type:"STR", sport:"strength",
+    blocks:[
+      {label:"Mobility", time:"~5 min", what:"Hips, ankles, T-spine opener", target:"primed"},
+      {label:"Strength rounds", time:"3 rounds", what:"Goblet squat 10 · Single-leg RDL 8/side · Push-up 10 · Bent-over row 10/side", target:"controlled, full range"},
+      {label:"Core circuit", time:"3 rounds", what:"Plank 45s · Dead bug 10/side · Side plank 30s/side", target:"strict form"},
+      {label:"Cool-down", time:"~2 min", what:"Stretch hips, hamstrings, chest", target:"breathe"}
+    ], zones:[],
+    notes:"Triathlon-specific compound work — no need to chase heavy weight. Drops out after W8 so the race-specific block stays sport-focused.",
+    progression:"W1-W8 only, Monday PM (W6 exception: Tue PM)."},
+  rest: {name:"Rest Day", type:"REST", sport:"rest",
+    blocks:[
+      {label:"What to do", time:"all day", what:"Full recovery — no structured training", target:"hydrate, eat well, sleep early"}
+    ], zones:[],
+    notes:"Rest days drive adaptation. Walking, easy mobility, foam rolling are fine. If you feel a need to do something, sleep more."},
+  race: {name:"Race Day", type:"RACE", sport:"race",
+    blocks:[
+      {label:"Swim", time:"2.4 mi", what:"Lake Monona mass start", target:"target ~1h15-1h25"},
+      {label:"T1", time:"~10 min", what:"Wetsuit off, helmet on, ride out", target:"steady, no rush"},
+      {label:"Bike", time:"112 mi", what:"Two-loop course through Verona", target:"~6h00-6h30 @ 80-85% FTP, IM goal 208-221 W"},
+      {label:"T2", time:"~5 min", what:"Rack bike, shoes/visor on, go", target:"smooth"},
+      {label:"Run", time:"26.2 mi", what:"Madison out-and-back, two loops", target:"~4h00-4h30 @ 8:30-8:45/mi"}
+    ], zones:[],
+    notes:"🏁 Race day. You've done the work. Trust the plan, fuel often, run YOUR pace."}
+};
+
+const DAYS = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+const msDay = 86400000;
+const fmtMD = d => `${d.getMonth()+1}/${d.getDate()}`;
+const EFFORT_COLOR = {AE:"#3aa760", REC:"#7e93b3", THR:"#e0863a", STR:"#a878d9", REST:"#6b7280", RACE:"#c53030"};
+
+function inferTemplate(s){
+  const d = s.d, e = s.e;
+  if(e === 'RACE') return 'race';
+  if(e === 'REST') return 'rest';
+  if(/Strength/i.test(d)) return 'strength';
+  if(/OW Recovery Swim|OW shakeout/i.test(d)) return 'ow_recovery_swim';
+  if(/CSS Swim/i.test(d)) return 'css_swim';
+  if(/Technique Swim/i.test(d)) return 'technique_swim';
+  if(/Recovery Swim/i.test(d)) return 'recovery_swim';
+  if(/Aerobic Swim/i.test(d)) return 'aerobic_swim';
+  if(/Swim/i.test(d)) return 'aerobic_swim';
+  if(/Sweet Spot/i.test(d)) return 'sweet_spot_bike';
+  if(/Desc\. Threshold|Descending Threshold/i.test(d)) return 'desc_threshold_bike';
+  if(/Bike/i.test(d) && /Race-pace|race-pace/i.test(d)){
+    return /\d+\s*[×x]\s*\d+\s*m\b/i.test(d) ? 'race_pace_bike' : 'long_bike_race_pace';
+  }
+  if(/Threshold/i.test(d) && /Bike/i.test(d)) return 'threshold_bike';
+  if(/Long Bike/i.test(d)) return 'long_bike_z2';
+  if(/Bike/i.test(d)) return 'aerobic_bike';
+  if(/Brick/i.test(d)) return /@RP|race-pace/i.test(d) ? 'brick_run_rp' : 'brick_run_z2';
+  if(/Race-pace Run/i.test(d)) return 'race_pace_run';
+  if(/Threshold Run/i.test(d)) return 'threshold_run';
+  if(/Tempo Run/i.test(d)) return 'tempo_run';
+  if(/Mid-week Long Run/i.test(d)) return 'midweek_long_run';
+  if(/Long Run/i.test(d)) return 'long_run_z2';
+  if(/Mid-week Run/i.test(d)) return 'midweek_run_z2';
+  if(/Easy Run|Recovery Run/i.test(d)) return e === 'AE' ? 'easy_run_z2' : 'easy_run_z1';
+  if(/Run/i.test(d)) return e === 'AE' ? 'easy_run_z2' : 'easy_run_z1';
+  return 'easy_run_z1';
+}
+
+function extractReps(desc){
+  const m = desc.match(/(\d+)\s*[×x]\s*(\d+)\s*(m(?:in)?|yd)?/i);
+  if(!m) return null;
+  return {count: +m[1], val: +m[2], unit: (m[3]||'').toLowerCase()};
+}
+function formatIntervals(reps, sport){
+  if(!reps) return null;
+  let unit = reps.unit;
+  if(!unit) unit = sport === 'swim' ? 'yd' : 'min';
+  else if(unit === 'm') unit = 'min';
+  return `${reps.count} × ${reps.val} ${unit}`;
+}
+
+/* Progress comes from progress.json (hosted alongside this file).
+   SHARED_PROGRESS is a fallback used only if progress.json can't be loaded. */
+const SHARED_PROGRESS = {};
+let DONE = SHARED_PROGRESS;
+let UPDATED = null;
+
+const today = new Date();
+document.getElementById('cd-days').textContent = Math.max(0, Math.ceil((RACE - today) / msDay));
+const planDay = Math.floor((today - START) / msDay);
+document.getElementById('cd-wk').textContent =
+  planDay < 0 ? "—" : (planDay >= 112 ? "Race!" : `W${Math.floor(planDay/7)+1}`);
+
+function weeklyTotals(wk){
+  const t = {AE:0, REC:0, THR:0, STR:0};
+  wk.days.forEach(day => day.forEach(s => { if(t[s.e] !== undefined) t[s.e] += s.m; }));
+  return t;
+}
+function totalsExclStr(t){ return t.AE + t.REC + t.THR; }
+function pct(t){
+  const total = totalsExclStr(t);
+  if(total === 0) return {AE:0, REC:0, THR:0};
+  return {AE: t.AE/total*100, REC: t.REC/total*100, THR: t.THR/total*100};
+}
+
+const weeklyData = PLAN.map(weeklyTotals);
+const grandTotal = weeklyData.reduce((a,t) => ({
+  AE:a.AE+t.AE, REC:a.REC+t.REC, THR:a.THR+t.THR, STR:a.STR+t.STR
+}), {AE:0,REC:0,THR:0,STR:0});
+const totalHrs = (grandTotal.AE + grandTotal.REC + grandTotal.THR) / 60;
+document.getElementById('stat-total').textContent = totalHrs.toFixed(1) + 'h';
+
+const overallPct = pct(grandTotal);
+document.getElementById('stat-ae-pct').innerHTML =
+  `<span style="color:var(--ae)">${overallPct.AE.toFixed(0)}</span>/<span style="color:var(--rec)">${overallPct.REC.toFixed(0)}</span>/<span style="color:var(--thr)">${overallPct.THR.toFixed(0)}</span>`;
+document.getElementById('stat-ae').textContent = `${(grandTotal.AE/60).toFixed(1)}h (${overallPct.AE.toFixed(0)}%)`;
+document.getElementById('stat-rec').textContent = `${(grandTotal.REC/60).toFixed(1)}h (${overallPct.REC.toFixed(0)}%)`;
+document.getElementById('stat-thr').textContent = `${(grandTotal.THR/60).toFixed(1)}h (${overallPct.THR.toFixed(0)}%)`;
+
+const ob = document.getElementById('overall-bar');
+ob.innerHTML =
+  `<span style="background:var(--ae); width:${overallPct.AE}%"></span>` +
+  `<span style="background:var(--rec); width:${overallPct.REC}%"></span>` +
+  `<span style="background:var(--thr); width:${overallPct.THR}%"></span>`;
+
+function sessKey(w,d,s){ return `w${w}d${d}s${s}`; }
+function isCheckable(s){ return s.e !== 'REST' && s.e !== 'RACE'; }
+
+let TOTAL_WORKOUTS = 0;
+PLAN.forEach(wk => wk.days.forEach(day => day.forEach(s => { if(isCheckable(s)) TOTAL_WORKOUTS++; })));
+
+function doneCount(){
+  let n = 0;
+  PLAN.forEach((wk,i) => wk.days.forEach((day,d) => day.forEach((s,si) => {
+    if(isCheckable(s) && DONE[sessKey(i,d,si)]) n++;
+  })));
+  return n;
+}
+
+function updateProgress(){
+  const done = doneCount();
+  document.getElementById('prog-done').textContent = done;
+  document.getElementById('prog-total').textContent = TOTAL_WORKOUTS;
+  const p = TOTAL_WORKOUTS ? Math.round(done / TOTAL_WORKOUTS * 100) : 0;
+  document.getElementById('prog-pct').textContent = p + '%';
+  document.getElementById('prog-fill').style.width = p + '%';
+}
+
+function renderUpdated(){
+  const t = document.getElementById('updated-tag');
+  if(UPDATED){
+    const d = new Date(UPDATED);
+    t.textContent = 'Progress updated ' +
+      (isNaN(d.getTime()) ? UPDATED : d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}));
+  } else {
+    t.textContent = '';
+  }
+}
+
+const cal = document.getElementById('calendar');
+function mkHdr(t){ return Object.assign(document.createElement('div'), {className:'hdr', textContent:t}); }
+
+function renderCalendar(){
+  cal.innerHTML = '';
+  cal.appendChild(mkHdr('Week'));
+  DAYS.forEach(d => cal.appendChild(mkHdr(d)));
+  cal.appendChild(mkHdr('Phase'));
+
+  PLAN.forEach((wk, i) => {
+    const wkStart = new Date(START.getTime() + i*7*msDay);
+    const phaseCls = wk.race?'ph-race': wk.recover?'ph-recover': wk.taper?'ph-taper': wk.peak?'ph-peak':'ph-build';
+    const wkPct = pct(weeklyData[i]);
+
+    let wkTotal = 0, wkDone = 0;
+    wk.days.forEach((day,d) => day.forEach((s,si) => {
+      if(isCheckable(s)){ wkTotal++; if(DONE[sessKey(i,d,si)]) wkDone++; }
+    }));
+
+    const lab = document.createElement('div');
+    lab.className = 'wlabel ' + phaseCls;
+    lab.innerHTML = `<div class="wnum">W${String(i+1).padStart(2,'0')}</div>
+      <div>${fmtMD(wkStart)}</div><div class="hrs">${wk.hours}h</div>
+      <div class="mini-bar">
+        <span style="background:var(--ae); width:${wkPct.AE}%"></span>
+        <span style="background:var(--rec); width:${wkPct.REC}%"></span>
+        <span style="background:var(--thr); width:${wkPct.THR}%"></span>
+      </div>
+      <div class="mini-pct">${wkPct.AE.toFixed(0)}/${wkPct.REC.toFixed(0)}/${wkPct.THR.toFixed(0)}</div>
+      <div class="wk-done${wkTotal>0 && wkDone===wkTotal ? ' complete' : ''}">${wkTotal ? '✓ '+wkDone+'/'+wkTotal : ''}</div>`;
+    cal.appendChild(lab);
+
+    for(let d=0; d<7; d++){
+      const dayDate = new Date(wkStart.getTime() + d*msDay);
+      const isRaceDay = dayDate.getTime() === RACE.getTime();
+      const cell = document.createElement('div');
+      const sessions = wk.days[d];
+      const restDay = sessions.length === 1 && sessions[0].e === "REST";
+      cell.className = 'day' + (isRaceDay ? ' race' : '') + (restDay ? ' rest-day' : '');
+      cell.dataset.wk = i;
+      cell.dataset.day = d;
+      let html = `<div class="date">${fmtMD(dayDate)}</div>`;
+      sessions.forEach((s, si) => {
+        const cls = isRaceDay ? 'race' : (s.e === "REST" ? 'rest' : s.e.toLowerCase());
+        const dataAttrs = `data-wk="${i}" data-day="${d}" data-si="${si}"`;
+        if(isCheckable(s)){
+          const done = !!DONE[sessKey(i, d, si)];
+          html += `<span class="sess ${cls}${done ? ' done' : ''}" ${dataAttrs}>`
+                + `<span class="ck"></span>`
+                + `<span class="txt">${s.d}</span></span>`;
+        } else {
+          html += `<span class="sess ${cls}" ${dataAttrs}><span class="txt">${s.d}</span></span>`;
+        }
+      });
+      cell.innerHTML = html;
+      cal.appendChild(cell);
+    }
+
+    const ph = document.createElement('div');
+    ph.className = 'wlabel ' + phaseCls;
+    ph.style.fontSize = '10px';
+    ph.innerHTML = `<div style="font-weight:600">${wk.phase}</div>`;
+    cal.appendChild(ph);
+  });
+}
+
+// Calendar interaction (read-only): clicking a session opens detail; empty area opens week view
+cal.addEventListener('click', e => {
+  const sess = e.target.closest('.sess');
+  if(sess && sess.dataset.wk !== undefined){
+    openDetail(+sess.dataset.wk, +sess.dataset.day, +sess.dataset.si);
+    return;
+  }
+  const cell = e.target.closest('.day');
+  if(cell && cell.dataset.wk !== undefined){ openModal(+cell.dataset.wk, +cell.dataset.day); }
+});
+
+// ===== Volume chart =====
+if(typeof Chart !== 'undefined'){
+  const ctx = document.getElementById('volChart').getContext('2d');
+  const labels = PLAN.map((w,i)=>`W${String(i+1).padStart(2,'0')}`);
+  new Chart(ctx, {
+    type:'bar',
+    data:{
+      labels,
+      datasets:[
+        {label:'Aerobic Endurance', data:weeklyData.map(w=>w.AE/60), backgroundColor:'#3aa760', stack:'tot'},
+        {label:'Recovery',          data:weeklyData.map(w=>w.REC/60),backgroundColor:'#7e93b3', stack:'tot'},
+        {label:'Threshold / Tempo / Interval', data:weeklyData.map(w=>w.THR/60), backgroundColor:'#e0863a', stack:'tot'},
+        {label:'Strength',          data:weeklyData.map(w=>w.STR/60),backgroundColor:'#a878d9', stack:'tot'}
+      ]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{
+        legend:{position:'top', labels:{color:'#e8eef7', font:{size:12}}},
+        tooltip:{callbacks:{
+          title:(items)=>{
+            const i = items[0].dataIndex;
+            const wkStart = new Date(START.getTime() + i*7*msDay);
+            return `W${String(i+1).padStart(2,'0')} · ${wkStart.toLocaleDateString('en-US',{month:'short',day:'numeric'})} · ${PLAN[i].phase}`;
+          },
+          footer:(items)=>{
+            const i = items[0].dataIndex;
+            const p = pct(weeklyData[i]);
+            return `AE ${p.AE.toFixed(0)}% / REC ${p.REC.toFixed(0)}% / THR ${p.THR.toFixed(0)}%  ·  Target ~${PLAN[i].hours}h`;
+          }
+        }}
+      },
+      scales:{
+        x:{ticks:{color:'#9fb0c7'}, grid:{color:'rgba(255,255,255,.05)'}, stacked:true},
+        y:{ticks:{color:'#9fb0c7', callback:v=>v+'h'}, grid:{color:'rgba(255,255,255,.06)'}, stacked:true,
+           title:{display:true,text:'Hours',color:'#9fb0c7'}}
+      }
+    }
+  });
+}
+
+// ===== Workout Library =====
+const lib = document.getElementById('library');
+LIBRARY.forEach(w => {
+  const card = document.createElement('div');
+  card.className = `wcard ${w.effort.toLowerCase()}`;
+  card.innerHTML = `
+    <div class="wname">${w.name}<span class="badge">${w.effort}</span></div>
+    <div class="struct"><strong style="color:var(--text)">Structure:</strong> ${w.structure}</div>
+    <div class="prog"><strong>Progression:</strong> ${w.progression}</div>`;
+  lib.appendChild(card);
+});
+
+// ===== Modal (read-only) — supports 'week' overview and 'detail' workout views =====
+let modalMode = 'week', curModalWk = 0, curModalDay = 0, curModalSi = 0;
+
+function openModal(wkIdx, dayIdx){
+  curModalWk = wkIdx; curModalDay = dayIdx; modalMode = 'week';
+  renderModal();
+  document.getElementById('modal').classList.add('open');
+}
+function openDetail(wkIdx, dayIdx, siIdx){
+  curModalWk = wkIdx; curModalDay = dayIdx; curModalSi = siIdx; modalMode = 'detail';
+  renderDetail();
+  document.getElementById('modal').classList.add('open');
+}
+function backToWeek(){ modalMode = 'week'; renderModal(); }
+
+function renderModal(){
+  const wkIdx = curModalWk, dayIdx = curModalDay;
+  const wk = PLAN[wkIdx];
+  const wkStart = new Date(START.getTime() + wkIdx*7*msDay);
+  const dayDate = new Date(wkStart.getTime() + dayIdx*msDay);
+  const wkP = pct(weeklyData[wkIdx]);
+  document.getElementById('modal-title').textContent =
+    `${DAYS[dayIdx]} · ${dayDate.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'})}`;
+  document.getElementById('modal-meta').innerHTML =
+    `Week ${wkIdx+1} · ${wk.block} · ${wk.phase} · ~${wk.hours}h target  ·  ` +
+    `<strong style="color:var(--ae)">AE ${wkP.AE.toFixed(0)}%</strong> · ` +
+    `<strong style="color:var(--rec)">REC ${wkP.REC.toFixed(0)}%</strong> · ` +
+    `<strong style="color:var(--thr)">THR ${wkP.THR.toFixed(0)}%</strong>`;
+  const body = document.getElementById('modal-body');
+  body.innerHTML = `<div class="week-banner"><strong>Full week (${fmtMD(wkStart)} – ${fmtMD(new Date(wkStart.getTime()+6*msDay))}):</strong> click any workout for its detailed structure · a green ✓ marks completed</div>`;
+  DAYS.forEach((d,i) => {
+    const div = document.createElement('div');
+    div.className = 'day-detail';
+    const date = new Date(wkStart.getTime() + i*msDay);
+    div.innerHTML = `<div class="dname">${d} · ${fmtMD(date)}${i===dayIdx?' ← selected':''}</div>` +
+      wk.days[i].map((s,si) => {
+        const color = EFFORT_COLOR[s.e] || '#fff';
+        const dur = s.m > 0 ? ` <span class="dmin">(${s.m}m)</span>` : '';
+        const dataAttrs = `data-wk="${wkIdx}" data-day="${i}" data-si="${si}"`;
+        if(isCheckable(s)){
+          const done = !!DONE[sessKey(wkIdx, i, si)];
+          return `<div class="dsess${done?' done':''}" ${dataAttrs} style="border-left:3px solid ${color}">` +
+            `<span class="mck"></span>` +
+            `<span class="dtxt">${s.d}${dur}</span></div>`;
+        }
+        return `<div class="dsess" ${dataAttrs} style="border-left:3px solid ${color}"><span class="dtxt">${s.d}${dur}</span></div>`;
+      }).join('');
+    if(i===dayIdx) div.style.background = '#243957';
+    body.appendChild(div);
+  });
+}
+
+function renderDetail(){
+  const wkIdx = curModalWk, dayIdx = curModalDay, siIdx = curModalSi;
+  const wk = PLAN[wkIdx];
+  const sess = wk.days[dayIdx][siIdx];
+  if(!sess) return;
+  const wkStart = new Date(START.getTime() + wkIdx*7*msDay);
+  const dayDate = new Date(wkStart.getTime() + dayIdx*msDay);
+  const tplKey = inferTemplate(sess);
+  const tpl = TEMPLATES[tplKey] || TEMPLATES.rest;
+  const reps = extractReps(sess.d);
+  const intervalStr = formatIntervals(reps, tpl.sport);
+
+  document.getElementById('modal-title').textContent =
+    tpl.name + (intervalStr ? ' · ' + intervalStr : '');
+  const dur = sess.m > 0 ? `${sess.m} min` : '—';
+  document.getElementById('modal-meta').innerHTML =
+    `${DAYS[dayIdx]} ${dayDate.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})} · ` +
+    `Week ${wkIdx+1} · ${wk.phase} · ${dur} ` +
+    `<span class="detail-effort-pill ${sess.e}">${sess.e}</span>`;
+
+  const body = document.getElementById('modal-body');
+  let html = '';
+  if(sess.d && sess.e !== 'REST'){
+    html += `<div class="detail-desc"><strong>From the plan:</strong> ${sess.d}</div>`;
+  }
+  if(tpl.blocks && tpl.blocks.length){
+    html += `<div class="detail-sec-h">Structure</div>`;
+    tpl.blocks.forEach(b => {
+      const ll = b.label.toLowerCase();
+      const cls = ll.startsWith('warm') ? 'is-warm'
+                : ll.startsWith('cool') ? 'is-cool'
+                : (ll.includes('main') || ll.includes('block')) ? 'is-main' : '';
+      html += `<div class="detail-block ${cls}">`
+        + `<div class="dbl-head"><strong>${b.label}</strong><span class="dbl-time">${b.time}</span></div>`
+        + `<div class="dbl-what">${b.what}</div>`
+        + (b.target ? `<div class="dbl-target">→ ${b.target}</div>` : '')
+        + `</div>`;
+    });
+  }
+  if(tpl.zones && tpl.zones.length && ZONES[tpl.sport]){
+    html += `<div class="detail-sec-h">Pace / power zones (reference)</div><div class="pace-zones">`;
+    tpl.zones.forEach(zk => {
+      const z = ZONES[tpl.sport][zk];
+      if(z){
+        html += `<div class="pace-zone"><strong>${z.label}</strong>${z.val}${z.rpe ? `<span class="rpe">${z.rpe}</span>` : ''}</div>`;
+      }
+    });
+    html += `</div>`;
+  }
+  if(tpl.notes){
+    html += `<div class="detail-sec-h">Notes</div><div class="detail-notes">${tpl.notes}</div>`;
+  }
+  if(tpl.progression){
+    html += `<div class="detail-sec-h">Progression of this workout type</div><div class="detail-prog">${tpl.progression}</div>`;
+  }
+
+  // Status (read-only) + Back button
+  const checkSess = isCheckable(sess);
+  const key = checkSess ? sessKey(wkIdx, dayIdx, siIdx) : null;
+  const done = key && !!DONE[key];
+  html += `<div class="detail-actions">`
+    + `<button id="back-to-week">← Back to week view</button>`;
+  if(checkSess){
+    html += `<div class="detail-status${done?' done':''}">${done ? '✓ Completed' : 'Not yet logged'}</div>`;
+  }
+  html += `</div>`;
+
+  body.innerHTML = html;
+  document.getElementById('back-to-week').addEventListener('click', backToWeek);
+}
+
+function closeModal(){ document.getElementById('modal').classList.remove('open'); }
+
+document.getElementById('modal-body').addEventListener('click', e => {
+  const dsess = e.target.closest('.dsess');
+  if(dsess && dsess.dataset.wk !== undefined){
+    openDetail(+dsess.dataset.wk, +dsess.dataset.day, +dsess.dataset.si);
+  }
+});
+
+document.getElementById('modal').onclick = (e)=>{ if(e.target.id==='modal') closeModal(); };
+document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeModal(); });
+
+// ===== Init — load progress.json, then render =====
+function boot(){
+  renderCalendar();
+  updateProgress();
+  renderUpdated();
+}
+fetch('progress.json?v=' + Date.now(), {cache:'no-store'})
+  .then(r => { if(!r.ok) throw new Error('no progress.json'); return r.json(); })
+  .then(j => { DONE = (j && j.done) || {}; UPDATED = j && j.updated; boot(); })
+  .catch(() => { DONE = SHARED_PROGRESS; boot(); });
+</script>
+</body>
+</html>
