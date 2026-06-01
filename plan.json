@@ -85,14 +85,7 @@
     "phase": "Build 2 · rest Tue",
     "hours": 11,
     "days": [
-      [
-        {
-          "d": "PM Strength 30m",
-          "m": 30,
-          "e": "STR",
-          "id": "id_1_0_1_l15ut"
-        }
-      ],
+      [],
       [
         {
           "d": "REST",
@@ -105,6 +98,12 @@
           "m": 60,
           "e": "THR",
           "id": "id_1_0_0_pu22g"
+        },
+        {
+          "d": "PM Strength 30m",
+          "m": 30,
+          "e": "STR",
+          "id": "id_1_0_1_l15ut"
         }
       ],
       [
