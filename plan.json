@@ -1,0 +1,1266 @@
+[
+  {
+    "block": "Block 1",
+    "phase": "Build 1",
+    "hours": 10,
+    "days": [
+      [
+        {
+          "d": "AM Bike 1h Z2 steady",
+          "m": 60,
+          "e": "AE",
+          "id": "id_0_0_0_62vzu"
+        },
+        {
+          "d": "PM Strength 30m",
+          "m": 30,
+          "e": "STR",
+          "id": "id_0_0_1_hwrlj"
+        }
+      ],
+      [
+        {
+          "d": "AM Aerobic Swim 2,500yd",
+          "m": 30,
+          "e": "AE",
+          "id": "id_0_1_0_13to3"
+        },
+        {
+          "d": "PM Easy Run 25m Z1",
+          "m": 25,
+          "e": "REC",
+          "id": "id_0_1_1_ktgh3"
+        }
+      ],
+      [
+        {
+          "d": "AM Tempo Run 1h — 5×3m T",
+          "m": 60,
+          "e": "THR",
+          "id": "id_0_2_0_xb9mj"
+        }
+      ],
+      [
+        {
+          "d": "AM Recovery Swim 2,500yd",
+          "m": 30,
+          "e": "REC",
+          "id": "id_0_3_0_i6mm4"
+        },
+        {
+          "d": "PM Mid-week Run 1h Z2",
+          "m": 60,
+          "e": "AE",
+          "id": "id_0_3_1_evjbh"
+        }
+      ],
+      [
+        {
+          "d": "AM CSS Swim 2,500yd — 5×100",
+          "m": 45,
+          "e": "THR",
+          "id": "id_0_4_0_k0jgz"
+        }
+      ],
+      [
+        {
+          "d": "Long Bike 3h Z2",
+          "m": 180,
+          "e": "AE",
+          "id": "id_0_5_0_2p4zt"
+        }
+      ],
+      [
+        {
+          "d": "Long Run 1h15 Z2",
+          "m": 75,
+          "e": "AE",
+          "id": "id_0_6_0_e1zp1"
+        }
+      ]
+    ]
+  },
+  {
+    "block": "Block 1",
+    "phase": "Build 2 · rest Tue",
+    "hours": 11,
+    "days": [
+      [
+        {
+          "d": "PM Strength 30m",
+          "m": 30,
+          "e": "STR",
+          "id": "id_1_0_1_l15ut"
+        }
+      ],
+      [
+        {
+          "d": "REST",
+          "m": 0,
+          "e": "REST",
+          "id": "id_1_1_0_x9gma"
+        },
+        {
+          "d": "AM Bike 1h — 4×6m Sweet Spot",
+          "m": 60,
+          "e": "THR",
+          "id": "id_1_0_0_pu22g"
+        }
+      ],
+      [
+        {
+          "d": "AM Tempo Run 1h — 5×4m T",
+          "m": 60,
+          "e": "THR",
+          "id": "id_1_2_0_a4aoj"
+        }
+      ],
+      [
+        {
+          "d": "AM Recovery Swim 2,800yd",
+          "m": 35,
+          "e": "REC",
+          "id": "id_1_3_0_8jdsm"
+        },
+        {
+          "d": "PM Mid-week Run 1h Z2",
+          "m": 60,
+          "e": "AE",
+          "id": "id_1_3_1_9u4ui"
+        }
+      ],
+      [
+        {
+          "d": "AM CSS Swim 2,500yd — 6×100",
+          "m": 45,
+          "e": "THR",
+          "id": "id_1_4_0_jgvjs"
+        }
+      ],
+      [
+        {
+          "d": "Long Bike 3h30 Z2",
+          "m": 210,
+          "e": "AE",
+          "id": "id_1_5_0_a12sl"
+        }
+      ],
+      [
+        {
+          "d": "Long Run 1h30 Z2",
+          "m": 90,
+          "e": "AE",
+          "id": "id_1_6_0_wja1f"
+        }
+      ]
+    ]
+  },
+  {
+    "block": "Block 1",
+    "phase": "Build 3 (peak)",
+    "hours": 12,
+    "peak": true,
+    "days": [
+      [
+        {
+          "d": "AM Bike 1h15 — 3×10m Threshold",
+          "m": 75,
+          "e": "THR",
+          "id": "id_2_0_0_m54is"
+        },
+        {
+          "d": "PM Strength 30m",
+          "m": 30,
+          "e": "STR",
+          "id": "id_2_0_1_qa6hg"
+        }
+      ],
+      [
+        {
+          "d": "AM Aerobic Swim 2,500yd",
+          "m": 30,
+          "e": "AE",
+          "id": "id_2_1_0_kqutl"
+        },
+        {
+          "d": "PM Easy Run 30m Z1",
+          "m": 30,
+          "e": "REC",
+          "id": "id_2_1_1_wlclc"
+        }
+      ],
+      [
+        {
+          "d": "AM Tempo Run 1h15 — 5×5m T",
+          "m": 75,
+          "e": "THR",
+          "id": "id_2_2_0_c2plf"
+        }
+      ],
+      [
+        {
+          "d": "AM Recovery Swim 3,000yd",
+          "m": 35,
+          "e": "REC",
+          "id": "id_2_3_0_8rg5x"
+        },
+        {
+          "d": "PM Mid-week Run 1h Z2",
+          "m": 60,
+          "e": "AE",
+          "id": "id_2_3_1_opgs3"
+        }
+      ],
+      [
+        {
+          "d": "AM CSS Swim 2,800yd — 8×100",
+          "m": 50,
+          "e": "THR",
+          "id": "id_2_4_0_9sb65"
+        }
+      ],
+      [
+        {
+          "d": "Long Bike 4h Z2 — 3×15m SS embed",
+          "m": 240,
+          "e": "AE",
+          "id": "id_2_5_0_oucm4"
+        }
+      ],
+      [
+        {
+          "d": "Long Run 1h45 Z2",
+          "m": 105,
+          "e": "AE",
+          "id": "id_2_6_0_iy74e"
+        }
+      ]
+    ]
+  },
+  {
+    "block": "Block 1",
+    "phase": "RECOVER",
+    "hours": 6,
+    "recover": true,
+    "days": [
+      [
+        {
+          "d": "AM Strength 30m",
+          "m": 30,
+          "e": "STR",
+          "id": "id_3_0_0_fcty5"
+        }
+      ],
+      [
+        {
+          "d": "AM Recovery Swim 2,000yd",
+          "m": 25,
+          "e": "REC",
+          "id": "id_3_1_0_uxu7k"
+        },
+        {
+          "d": "PM Easy Run 30m Z1",
+          "m": 30,
+          "e": "REC",
+          "id": "id_3_1_1_20kv0"
+        }
+      ],
+      [
+        {
+          "d": "AM Easy Run 30m Z1",
+          "m": 30,
+          "e": "REC",
+          "id": "id_3_2_0_a4muk"
+        }
+      ],
+      [
+        {
+          "d": "AM Recovery Swim 2,000yd",
+          "m": 25,
+          "e": "REC",
+          "id": "id_3_3_0_wvs7k"
+        },
+        {
+          "d": "PM Easy Run 30m Z1",
+          "m": 30,
+          "e": "REC",
+          "id": "id_3_3_1_y9sl8"
+        }
+      ],
+      [
+        {
+          "d": "REST",
+          "m": 0,
+          "e": "REST",
+          "id": "id_3_4_0_jafwl"
+        }
+      ],
+      [
+        {
+          "d": "Bike 2h Z2",
+          "m": 120,
+          "e": "AE",
+          "id": "id_3_5_0_p72n9"
+        }
+      ],
+      [
+        {
+          "d": "Easy Run 45m Z1",
+          "m": 45,
+          "e": "REC",
+          "id": "id_3_6_0_zxe1c"
+        }
+      ]
+    ]
+  },
+  {
+    "block": "Block 2",
+    "phase": "Build 1",
+    "hours": 12,
+    "days": [
+      [
+        {
+          "d": "AM Easy Run 45m Z2",
+          "m": 45,
+          "e": "AE",
+          "id": "id_4_0_0_xgmjp"
+        },
+        {
+          "d": "PM Strength 30m",
+          "m": 30,
+          "e": "STR",
+          "id": "id_4_0_1_ct5k6"
+        }
+      ],
+      [
+        {
+          "d": "AM Bike 1h15 — 4×8m Threshold",
+          "m": 75,
+          "e": "THR",
+          "id": "id_4_1_0_anprn"
+        }
+      ],
+      [
+        {
+          "d": "AM Tempo Run 1h — 4×6m T",
+          "m": 60,
+          "e": "THR",
+          "id": "id_4_2_0_ejdq5"
+        }
+      ],
+      [
+        {
+          "d": "AM Recovery Swim 3,000yd",
+          "m": 35,
+          "e": "REC",
+          "id": "id_4_3_0_kuho3"
+        },
+        {
+          "d": "PM Mid-week Run 1h Z2",
+          "m": 60,
+          "e": "AE",
+          "id": "id_4_3_1_1c585"
+        }
+      ],
+      [
+        {
+          "d": "AM CSS Swim 2,500yd — 4×200",
+          "m": 45,
+          "e": "THR",
+          "id": "id_4_4_0_49l3q"
+        }
+      ],
+      [
+        {
+          "d": "Long Bike 4h Z2",
+          "m": 240,
+          "e": "AE",
+          "id": "id_4_5_0_uqphj"
+        },
+        {
+          "d": "Brick Run 20m Z2",
+          "m": 20,
+          "e": "AE",
+          "id": "id_4_5_1_fz56f"
+        }
+      ],
+      [
+        {
+          "d": "AM OW Recovery Swim 2,500yd",
+          "m": 45,
+          "e": "REC",
+          "id": "id_4_6_0_kfeoz"
+        },
+        {
+          "d": "Long Run 1h30 Z2",
+          "m": 90,
+          "e": "AE",
+          "id": "id_4_6_1_19k2u"
+        }
+      ]
+    ]
+  },
+  {
+    "block": "Block 2",
+    "phase": "Build 2 · rest Mon",
+    "hours": 13,
+    "days": [
+      [
+        {
+          "d": "REST",
+          "m": 0,
+          "e": "REST",
+          "id": "id_5_0_0_io6zd"
+        }
+      ],
+      [
+        {
+          "d": "AM Bike 1h30 — 3×12m Threshold",
+          "m": 90,
+          "e": "THR",
+          "id": "id_5_1_0_o6yu3"
+        },
+        {
+          "d": "PM Strength 30m (W6 exception)",
+          "m": 30,
+          "e": "STR",
+          "id": "id_5_1_1_k0zol"
+        }
+      ],
+      [
+        {
+          "d": "AM Tempo Run 1h15 — 4×8m T",
+          "m": 75,
+          "e": "THR",
+          "id": "id_5_2_0_e2dvw"
+        }
+      ],
+      [
+        {
+          "d": "AM Recovery Swim 3,000yd",
+          "m": 35,
+          "e": "REC",
+          "id": "id_5_3_0_kw4jq"
+        },
+        {
+          "d": "PM Mid-week Run 1h Z2",
+          "m": 60,
+          "e": "AE",
+          "id": "id_5_3_1_mhjub"
+        }
+      ],
+      [
+        {
+          "d": "AM CSS Swim 2,800yd — 5×200",
+          "m": 50,
+          "e": "THR",
+          "id": "id_5_4_0_y2o5x"
+        }
+      ],
+      [
+        {
+          "d": "Long Bike 4h Z2",
+          "m": 240,
+          "e": "AE",
+          "id": "id_5_5_0_m9htt"
+        },
+        {
+          "d": "Brick Run 25m Z2",
+          "m": 25,
+          "e": "AE",
+          "id": "id_5_5_1_meu38"
+        }
+      ],
+      [
+        {
+          "d": "AM OW Recovery Swim 2,500yd",
+          "m": 45,
+          "e": "REC",
+          "id": "id_5_6_0_y34rl"
+        },
+        {
+          "d": "Long Run 1h45 Z2",
+          "m": 105,
+          "e": "AE",
+          "id": "id_5_6_1_vj617"
+        }
+      ]
+    ]
+  },
+  {
+    "block": "Block 2",
+    "phase": "Build 3 (peak)",
+    "hours": 14,
+    "peak": true,
+    "days": [
+      [
+        {
+          "d": "AM Easy Run 30m Z1",
+          "m": 30,
+          "e": "REC",
+          "id": "id_6_0_0_haojh"
+        },
+        {
+          "d": "PM Strength 30m",
+          "m": 30,
+          "e": "STR",
+          "id": "id_6_0_1_b36ly"
+        }
+      ],
+      [
+        {
+          "d": "AM Bike 1h30 — 4×12m Sweet Spot",
+          "m": 90,
+          "e": "THR",
+          "id": "id_6_1_0_2u403"
+        }
+      ],
+      [
+        {
+          "d": "AM Threshold Run 1h15 — 3×10m Threshold",
+          "m": 75,
+          "e": "THR",
+          "id": "id_6_2_0_ljurj"
+        }
+      ],
+      [
+        {
+          "d": "AM Recovery Swim 3,000yd",
+          "m": 35,
+          "e": "REC",
+          "id": "id_6_3_0_2g7qi"
+        },
+        {
+          "d": "PM Mid-week Run 1h Z2",
+          "m": 60,
+          "e": "AE",
+          "id": "id_6_3_1_0l6an"
+        }
+      ],
+      [
+        {
+          "d": "AM CSS Swim 2,800yd — 4×300",
+          "m": 50,
+          "e": "THR",
+          "id": "id_6_4_0_qc792"
+        }
+      ],
+      [
+        {
+          "d": "Long Bike 4h30 Z2",
+          "m": 270,
+          "e": "AE",
+          "id": "id_6_5_0_192jb"
+        },
+        {
+          "d": "Brick Run 30m Z2",
+          "m": 30,
+          "e": "AE",
+          "id": "id_6_5_1_p5sac"
+        }
+      ],
+      [
+        {
+          "d": "AM OW Recovery Swim 2,800yd",
+          "m": 50,
+          "e": "REC",
+          "id": "id_6_6_0_vo98s"
+        },
+        {
+          "d": "Long Run 1h45 Z2",
+          "m": 105,
+          "e": "AE",
+          "id": "id_6_6_1_h0vas"
+        }
+      ]
+    ]
+  },
+  {
+    "block": "Block 2",
+    "phase": "RECOVER",
+    "hours": 7,
+    "recover": true,
+    "days": [
+      [
+        {
+          "d": "AM Easy Run 30m Z1",
+          "m": 30,
+          "e": "REC",
+          "id": "id_7_0_0_4cknk"
+        },
+        {
+          "d": "PM Strength 30m",
+          "m": 30,
+          "e": "STR",
+          "id": "id_7_0_1_5ftyy"
+        }
+      ],
+      [
+        {
+          "d": "REST",
+          "m": 0,
+          "e": "REST",
+          "id": "id_7_1_0_1b6ek"
+        }
+      ],
+      [
+        {
+          "d": "AM Easy Run 45m Z2",
+          "m": 45,
+          "e": "AE",
+          "id": "id_7_2_0_kimn4"
+        }
+      ],
+      [
+        {
+          "d": "AM Recovery Swim 2,200yd",
+          "m": 30,
+          "e": "REC",
+          "id": "id_7_3_0_0bfns"
+        },
+        {
+          "d": "PM Easy Run 30m Z1",
+          "m": 30,
+          "e": "REC",
+          "id": "id_7_3_1_60gov"
+        }
+      ],
+      [
+        {
+          "d": "AM Technique Swim 2,200yd",
+          "m": 35,
+          "e": "REC",
+          "id": "id_7_4_0_rscgv"
+        }
+      ],
+      [
+        {
+          "d": "Bike 2h30 Z2",
+          "m": 150,
+          "e": "AE",
+          "id": "id_7_5_0_p62yv"
+        }
+      ],
+      [
+        {
+          "d": "Easy Run 1h Z2",
+          "m": 60,
+          "e": "AE",
+          "id": "id_7_6_0_j49uz"
+        }
+      ]
+    ]
+  },
+  {
+    "block": "Block 3",
+    "phase": "Build 1",
+    "hours": 13,
+    "days": [
+      [
+        {
+          "d": "AM Easy Run 30m Z1",
+          "m": 30,
+          "e": "REC",
+          "id": "id_8_0_0_zjbqs"
+        }
+      ],
+      [
+        {
+          "d": "AM Bike 1h30 — Desc. Threshold 9/7/5",
+          "m": 90,
+          "e": "THR",
+          "id": "id_8_1_0_25tpf"
+        }
+      ],
+      [
+        {
+          "d": "AM Race-pace Run 1h — 4×5m @RP",
+          "m": 60,
+          "e": "THR",
+          "id": "id_8_2_0_chs97"
+        }
+      ],
+      [
+        {
+          "d": "AM Recovery Swim 2,800yd",
+          "m": 35,
+          "e": "REC",
+          "id": "id_8_3_0_x4srb"
+        },
+        {
+          "d": "PM Mid-week Long Run 1h15 Z2",
+          "m": 75,
+          "e": "AE",
+          "id": "id_8_3_1_b5e51"
+        }
+      ],
+      [
+        {
+          "d": "AM CSS Swim 2,500yd — 4×400",
+          "m": 45,
+          "e": "THR",
+          "id": "id_8_4_0_hvw7e"
+        }
+      ],
+      [
+        {
+          "d": "Long Bike 4h30 race-pace Z2",
+          "m": 270,
+          "e": "AE",
+          "id": "id_8_5_0_e5e7m"
+        },
+        {
+          "d": "Brick Run 30m @RP",
+          "m": 30,
+          "e": "THR",
+          "id": "id_8_5_1_3w2ry"
+        }
+      ],
+      [
+        {
+          "d": "AM OW Recovery Swim 2,800yd",
+          "m": 50,
+          "e": "REC",
+          "id": "id_8_6_0_dbz7j"
+        },
+        {
+          "d": "Long Run 2h Z2",
+          "m": 120,
+          "e": "AE",
+          "id": "id_8_6_1_izu9f"
+        }
+      ]
+    ]
+  },
+  {
+    "block": "Block 3",
+    "phase": "Build 2 · rest Mon",
+    "hours": 14,
+    "days": [
+      [
+        {
+          "d": "REST",
+          "m": 0,
+          "e": "REST",
+          "id": "id_9_0_0_dupqq"
+        }
+      ],
+      [
+        {
+          "d": "AM Bike 1h45 — 3×15m Threshold",
+          "m": 105,
+          "e": "THR",
+          "id": "id_9_1_0_1jho2"
+        }
+      ],
+      [
+        {
+          "d": "AM Race-pace Run 1h15 — 2×20m @RP",
+          "m": 75,
+          "e": "THR",
+          "id": "id_9_2_0_twnde"
+        }
+      ],
+      [
+        {
+          "d": "AM Recovery Swim 3,000yd",
+          "m": 35,
+          "e": "REC",
+          "id": "id_9_3_0_6i1me"
+        },
+        {
+          "d": "PM Mid-week Long Run 1h30 Z2",
+          "m": 90,
+          "e": "AE",
+          "id": "id_9_3_1_smu2h"
+        }
+      ],
+      [
+        {
+          "d": "AM CSS Swim 2,800yd — 4×400",
+          "m": 50,
+          "e": "THR",
+          "id": "id_9_4_0_9l8yk"
+        }
+      ],
+      [
+        {
+          "d": "Long Bike 5h race-pace Z2",
+          "m": 300,
+          "e": "AE",
+          "id": "id_9_5_0_6r78m"
+        },
+        {
+          "d": "Brick Run 30m @RP",
+          "m": 30,
+          "e": "THR",
+          "id": "id_9_5_1_75cb7"
+        }
+      ],
+      [
+        {
+          "d": "Long Run 2h15 Z2",
+          "m": 135,
+          "e": "AE",
+          "id": "id_9_6_0_qolgv"
+        }
+      ]
+    ]
+  },
+  {
+    "block": "Block 3",
+    "phase": "🎯 PLAN PEAK",
+    "hours": 14,
+    "peak": true,
+    "days": [
+      [
+        {
+          "d": "AM Recovery Swim 2,000yd",
+          "m": 30,
+          "e": "REC",
+          "id": "id_10_0_0_8h3y5"
+        },
+        {
+          "d": "PM Easy Run 30m Z1",
+          "m": 30,
+          "e": "REC",
+          "id": "id_10_0_1_63zcx"
+        }
+      ],
+      [
+        {
+          "d": "AM Bike 1h Z2 (legs save)",
+          "m": 60,
+          "e": "AE",
+          "id": "id_10_1_0_u1vh0"
+        }
+      ],
+      [
+        {
+          "d": "AM Race-pace Run 45m primer",
+          "m": 45,
+          "e": "THR",
+          "id": "id_10_2_0_f2v2r"
+        }
+      ],
+      [
+        {
+          "d": "AM Recovery Swim 2,500yd",
+          "m": 30,
+          "e": "REC",
+          "id": "id_10_3_0_55d2n"
+        },
+        {
+          "d": "PM Easy Run 30m Z1",
+          "m": 30,
+          "e": "REC",
+          "id": "id_10_3_1_p7oms"
+        }
+      ],
+      [
+        {
+          "d": "AM CSS Swim 2,000yd — short tune-up",
+          "m": 35,
+          "e": "THR",
+          "id": "id_10_4_0_p2uzk"
+        }
+      ],
+      [
+        {
+          "d": "🎯 Long Bike 5h Z2 (race rehearsal)",
+          "m": 300,
+          "e": "AE",
+          "id": "id_10_5_0_gyzw3"
+        },
+        {
+          "d": "🎯 Brick Run 1h @RP",
+          "m": 60,
+          "e": "THR",
+          "id": "id_10_5_1_hm6bq"
+        }
+      ],
+      [
+        {
+          "d": "🎯 Long Run 3h / 22mi Z2",
+          "m": 180,
+          "e": "AE",
+          "id": "id_10_6_0_3vsqb"
+        }
+      ]
+    ]
+  },
+  {
+    "block": "Block 3",
+    "phase": "RECOVER",
+    "hours": 8,
+    "recover": true,
+    "days": [
+      [
+        {
+          "d": "AM Easy Run 40m Z2",
+          "m": 40,
+          "e": "AE",
+          "id": "id_11_0_0_jhu9g"
+        }
+      ],
+      [
+        {
+          "d": "REST",
+          "m": 0,
+          "e": "REST",
+          "id": "id_11_1_0_9zi1b"
+        }
+      ],
+      [
+        {
+          "d": "AM Easy Run 50m Z2",
+          "m": 50,
+          "e": "AE",
+          "id": "id_11_2_0_vmdmh"
+        }
+      ],
+      [
+        {
+          "d": "AM Recovery Swim 2,500yd",
+          "m": 30,
+          "e": "REC",
+          "id": "id_11_3_0_ijsxe"
+        },
+        {
+          "d": "PM Easy Run 30m Z1",
+          "m": 30,
+          "e": "REC",
+          "id": "id_11_3_1_ot65y"
+        }
+      ],
+      [
+        {
+          "d": "AM Technique Swim 2,000yd",
+          "m": 30,
+          "e": "REC",
+          "id": "id_11_4_0_i0316"
+        }
+      ],
+      [
+        {
+          "d": "Bike 2h30 Z2",
+          "m": 150,
+          "e": "AE",
+          "id": "id_11_5_0_3bqd5"
+        },
+        {
+          "d": "Brick Run 20m Z2",
+          "m": 20,
+          "e": "AE",
+          "id": "id_11_5_1_wu139"
+        }
+      ],
+      [
+        {
+          "d": "Easy Run 1h15 Z2",
+          "m": 75,
+          "e": "AE",
+          "id": "id_11_6_0_6z3jb"
+        }
+      ]
+    ]
+  },
+  {
+    "block": "Block 4",
+    "phase": "Race-specific sharpen",
+    "hours": 12,
+    "taper": true,
+    "days": [
+      [
+        {
+          "d": "AM Easy Run 45m Z2",
+          "m": 45,
+          "e": "AE",
+          "id": "id_12_0_0_y2hai"
+        }
+      ],
+      [
+        {
+          "d": "AM Bike 1h30 — 3×15m Race-pace",
+          "m": 90,
+          "e": "THR",
+          "id": "id_12_1_0_w702g"
+        }
+      ],
+      [
+        {
+          "d": "AM Race-pace Run 1h — 3×10m @RP",
+          "m": 60,
+          "e": "THR",
+          "id": "id_12_2_0_yjhou"
+        }
+      ],
+      [
+        {
+          "d": "AM Recovery Swim 2,800yd",
+          "m": 35,
+          "e": "REC",
+          "id": "id_12_3_0_cln9g"
+        },
+        {
+          "d": "PM Easy Run 30m Z1",
+          "m": 30,
+          "e": "REC",
+          "id": "id_12_3_1_6t14q"
+        }
+      ],
+      [
+        {
+          "d": "AM CSS Swim 2,500yd — tune-up",
+          "m": 45,
+          "e": "THR",
+          "id": "id_12_4_0_5rr9a"
+        }
+      ],
+      [
+        {
+          "d": "Bike 3h30 race-pace Z2",
+          "m": 210,
+          "e": "AE",
+          "id": "id_12_5_0_886kd"
+        },
+        {
+          "d": "Brick Run 30m @RP",
+          "m": 30,
+          "e": "THR",
+          "id": "id_12_5_1_xq7i9"
+        }
+      ],
+      [
+        {
+          "d": "AM OW Recovery Swim 2,500yd",
+          "m": 45,
+          "e": "REC",
+          "id": "id_12_6_0_lk1fu"
+        },
+        {
+          "d": "Long Run 1h45 Z2 (LAST LONG)",
+          "m": 105,
+          "e": "AE",
+          "id": "id_12_6_1_3jn9b"
+        }
+      ]
+    ]
+  },
+  {
+    "block": "Block 4",
+    "phase": "Taper 1 · rest Mon",
+    "hours": 10,
+    "taper": true,
+    "days": [
+      [
+        {
+          "d": "REST",
+          "m": 0,
+          "e": "REST",
+          "id": "id_13_0_0_pd38x"
+        }
+      ],
+      [
+        {
+          "d": "AM Bike 1h15 — 3×10m Race-pace",
+          "m": 75,
+          "e": "THR",
+          "id": "id_13_1_0_kercu"
+        }
+      ],
+      [
+        {
+          "d": "AM Race-pace Run 1h — 2×15m @RP",
+          "m": 60,
+          "e": "THR",
+          "id": "id_13_2_0_ovoz8"
+        }
+      ],
+      [
+        {
+          "d": "AM Recovery Swim 2,500yd",
+          "m": 35,
+          "e": "REC",
+          "id": "id_13_3_0_7drsy"
+        },
+        {
+          "d": "PM Easy Run 45m Z2",
+          "m": 45,
+          "e": "AE",
+          "id": "id_13_3_1_2ax0s"
+        }
+      ],
+      [
+        {
+          "d": "AM CSS Swim 2,500yd — tune-up",
+          "m": 45,
+          "e": "THR",
+          "id": "id_13_4_0_wqdwh"
+        }
+      ],
+      [
+        {
+          "d": "Bike 3h race-pace Z2",
+          "m": 180,
+          "e": "AE",
+          "id": "id_13_5_0_ctw19"
+        },
+        {
+          "d": "Brick Run 30m @RP",
+          "m": 30,
+          "e": "THR",
+          "id": "id_13_5_1_u65p7"
+        }
+      ],
+      [
+        {
+          "d": "Long Run 1h30 Z2",
+          "m": 90,
+          "e": "AE",
+          "id": "id_13_6_0_hcqnl"
+        }
+      ]
+    ]
+  },
+  {
+    "block": "Block 4",
+    "phase": "Taper 2",
+    "hours": 7,
+    "taper": true,
+    "days": [
+      [
+        {
+          "d": "AM Easy Run 30m Z2",
+          "m": 30,
+          "e": "AE",
+          "id": "id_14_0_0_1dls8"
+        }
+      ],
+      [
+        {
+          "d": "AM Bike 1h15 — 2×10m Race-pace",
+          "m": 75,
+          "e": "THR",
+          "id": "id_14_1_0_bp9dm"
+        }
+      ],
+      [
+        {
+          "d": "AM Race-pace Run 1h — 2×10m @RP",
+          "m": 60,
+          "e": "THR",
+          "id": "id_14_2_0_opes6"
+        }
+      ],
+      [
+        {
+          "d": "AM Recovery Swim 2,000yd",
+          "m": 30,
+          "e": "REC",
+          "id": "id_14_3_0_xwlm8"
+        },
+        {
+          "d": "PM Easy Run 25m Z1",
+          "m": 25,
+          "e": "REC",
+          "id": "id_14_3_1_uwbxk"
+        }
+      ],
+      [
+        {
+          "d": "AM CSS Swim 1,500yd — short tune",
+          "m": 30,
+          "e": "THR",
+          "id": "id_14_4_0_5h2nb"
+        }
+      ],
+      [
+        {
+          "d": "Bike 1h45 race-pace primer",
+          "m": 105,
+          "e": "AE",
+          "id": "id_14_5_0_o7e03"
+        }
+      ],
+      [
+        {
+          "d": "Easy Run 45m Z2 + 4×30s pickups",
+          "m": 45,
+          "e": "AE",
+          "id": "id_14_6_0_81lo5"
+        }
+      ]
+    ]
+  },
+  {
+    "block": "Block 4",
+    "phase": "🏁 RACE WEEK",
+    "hours": 4,
+    "race": true,
+    "days": [
+      [
+        {
+          "d": "AM Recovery Swim 1,500yd",
+          "m": 25,
+          "e": "REC",
+          "id": "id_15_0_0_btex7"
+        },
+        {
+          "d": "PM Easy Run 30m Z1",
+          "m": 30,
+          "e": "REC",
+          "id": "id_15_0_1_1ebnn"
+        }
+      ],
+      [
+        {
+          "d": "AM Aerobic Swim 1,200yd OW/pool loosen",
+          "m": 25,
+          "e": "AE",
+          "id": "id_15_1_0_as8vs"
+        }
+      ],
+      [
+        {
+          "d": "AM Easy Bike 45m + 4×30s @RP",
+          "m": 45,
+          "e": "AE",
+          "id": "id_15_2_0_t0bst"
+        }
+      ],
+      [
+        {
+          "d": "AM Easy Run 20m + 4×30s strides",
+          "m": 20,
+          "e": "REC",
+          "id": "id_15_3_0_75x5v"
+        }
+      ],
+      [
+        {
+          "d": "REST (travel/gear check)",
+          "m": 0,
+          "e": "REST",
+          "id": "id_15_4_0_elq4v"
+        }
+      ],
+      [
+        {
+          "d": "AM Swim 800yd OW shakeout + Easy Run 15m",
+          "m": 30,
+          "e": "REC",
+          "id": "id_15_5_0_zme12"
+        }
+      ],
+      [
+        {
+          "d": "🏁 IRONMAN RACE DAY 🏁",
+          "m": 0,
+          "e": "RACE",
+          "id": "id_15_6_0_wo9q4"
+        }
+      ]
+    ]
+  }
+]
