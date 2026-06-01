@@ -85,14 +85,15 @@
     "phase": "Build 2 · rest Tue",
     "hours": 11,
     "days": [
-      [],
       [
         {
           "d": "REST",
           "m": 0,
           "e": "REST",
           "id": "id_1_1_0_x9gma"
-        },
+        }
+      ],
+      [
         {
           "d": "AM Bike 1h — 4×6m Sweet Spot",
           "m": 60,
