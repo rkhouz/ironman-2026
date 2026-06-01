@@ -62,6 +62,51 @@ body{
 .topnav-links a.active{background:var(--ae); color:#ffffff}
 .topnav-actions{display:flex; gap:10px; align-items:center}
 
+/* Edit-plan toggle + edit mode */
+.editplan-btn{background:var(--panel); border:1px solid var(--line); color:var(--muted);
+  height:38px; padding:0 14px; border-radius:19px; cursor:pointer; font-size:12px; font-weight:700;
+  display:none; align-items:center; gap:6px; transition:.15s; line-height:1; white-space:nowrap}
+.editplan-btn:hover{border-color:var(--thr); color:var(--thr)}
+.editplan-btn.active{background:var(--thr); border-color:var(--thr); color:#fff}
+body.edit-mode .editplan-btn{display:inline-flex}   /* only visible when unlocked */
+body.editing-plan .cal .day .sess{cursor:grab; padding-left:8px}
+body.editing-plan .cal .day .sess:active{cursor:grabbing}
+body.editing-plan .cal .day .sess .ck{display:none}
+body.editing-plan .cal .day .sess{position:relative}
+body.editing-plan .cal .day .sess::after{content:"⠿"; position:absolute; right:3px; top:1px; color:var(--muted); font-size:10px; opacity:.55}
+body.editing-plan .cal .day.drag-over{outline:2px solid var(--thr); outline-offset:-2px; background:#f3e7e1 !important}
+.cal .day .sess.dragging{opacity:.35}
+.editplan-banner{display:none; background:#f5e2dc; border:1px solid #e0b3a8; color:#7a1212;
+  border-radius:8px; padding:9px 14px; font-size:12.5px; font-weight:600; margin-bottom:12px}
+body.editing-plan .editplan-banner{display:block}
+
+/* Edit form (inside #modal) */
+.edit-form{display:flex; flex-direction:column; gap:16px}
+.edit-form label{font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--ae); font-weight:700; display:block; margin-bottom:7px}
+.edit-form input[type=number], .edit-form textarea{
+  width:100%; background:var(--panel2); color:var(--text); border:1px solid var(--line); border-radius:8px;
+  padding:10px 12px; font-size:14px; font-family:inherit}
+.edit-form textarea{resize:vertical; min-height:58px; line-height:1.5}
+.edit-row{display:flex; gap:16px; flex-wrap:wrap}
+.edit-row > div{flex:1; min-width:140px}
+.edit-effort-opts{display:flex; gap:8px; flex-wrap:wrap}
+.eff-opt{flex:1; min-width:58px; text-align:center; padding:9px 6px; border-radius:8px; border:1.5px solid var(--line);
+  cursor:pointer; font-size:11px; font-weight:700; letter-spacing:.5px; color:var(--muted); transition:.12s; background:var(--panel)}
+.eff-opt:hover{border-color:var(--ae); color:var(--text)}
+.eff-opt.sel{color:#fff}
+.eff-opt.sel.AE{background:var(--ae); border-color:var(--ae)}
+.eff-opt.sel.REC{background:var(--rec); border-color:var(--rec); color:#1a2235}
+.eff-opt.sel.THR{background:var(--thr); border-color:var(--thr)}
+.eff-opt.sel.STR{background:var(--str); border-color:var(--str)}
+.eff-opt.sel.REST{background:var(--rest); border-color:var(--rest); color:#1a2235}
+.eff-opt.sel.RACE{background:var(--race); border-color:var(--race)}
+.edit-actions{display:flex; gap:10px; margin-top:6px; padding-top:16px; border-top:1px solid var(--line); flex-wrap:wrap}
+.edit-actions button{border:none; border-radius:7px; padding:10px 20px; font-size:13px; font-weight:600; cursor:pointer; transition:.15s}
+.edit-actions .save-btn{background:var(--success); color:#fff}
+.edit-actions .save-btn:hover{filter:brightness(1.08)}
+.edit-actions .cancel-btn{background:var(--panel); border:1px solid var(--line); color:var(--muted)}
+.edit-actions .cancel-btn:hover{border-color:var(--ae); color:var(--text)}
+
 .wrap{max-width:1500px; margin:0 auto; padding:24px}
 
 /* Anchor scroll offset for sticky nav */
@@ -354,6 +399,7 @@ body.edit-mode .modal-card .mck:hover{border-color:var(--ae); transform:scale(1.
   </div>
   <div class="topnav-actions">
     <span class="edit-indicator" id="edit-indicator"></span>
+    <button id="editplan-toggle" class="editplan-btn" title="Drag and edit workouts">✎ Edit plan</button>
     <button id="lock-btn" class="lock-btn" title="Click to enter edit mode">🔒</button>
   </div>
 </nav>
@@ -428,6 +474,7 @@ body.edit-mode .modal-card .mck:hover{border-color:var(--ae); transform:scale(1.
     <span style="color:var(--str)">■ black = Strength</span>.
     <br>A <strong>filled ✓</strong> marks a completed workout. <strong>Click any workout</strong> for its full structure, pace/power targets, intervals, and notes. <strong style="color:var(--ae)">Today's date</strong> is highlighted on the calendar.
   </div>
+  <div class="editplan-banner" id="editplan-banner">✎ Editing plan — drag a workout to any day or week · click a workout to edit its description, duration, or effort. Changes save to your GitHub repo automatically.</div>
   <div class="cal" id="calendar" style="margin-top:14px"></div>
 </div>
 
@@ -485,7 +532,7 @@ body.edit-mode .modal-card .mck:hover{border-color:var(--ae); transform:scale(1.
 const START = new Date(2026, 4, 25);
 const RACE  = new Date(2026, 8, 13);
 
-const PLAN = [
+const DEFAULT_PLAN = [
   {block:"Block 1", phase:"Build 1", hours:10, days:[
     [{d:"AM Bike 1h Z2 steady", m:60, e:"AE"}, {d:"PM Strength 30m", m:30, e:"STR"}],
     [{d:"AM Aerobic Swim 2,500yd", m:30, e:"AE"}, {d:"PM Easy Run 25m Z1", m:25, e:"REC"}],
@@ -994,36 +1041,71 @@ function pct(t){
   return {AE: t.AE/total*100, REC: t.REC/total*100, THR: t.THR/total*100};
 }
 
-const weeklyData = PLAN.map(weeklyTotals);
-const grandTotal = weeklyData.reduce((a,t) => ({
-  AE:a.AE+t.AE, REC:a.REC+t.REC, THR:a.THR+t.THR, STR:a.STR+t.STR
-}), {AE:0,REC:0,THR:0,STR:0});
-const totalHrs = (grandTotal.AE + grandTotal.REC + grandTotal.THR) / 60;
-document.getElementById('stat-total').textContent = totalHrs.toFixed(1) + 'h';
+// ===== Editable plan (replaces the hardcoded plan with plan.json from GitHub when present) =====
+function assignIds(plan){
+  plan.forEach((wk,wi)=>wk.days.forEach((day,di)=>day.forEach((s,si)=>{
+    if(!s.id) s.id = `id_${wi}_${di}_${si}_${Math.random().toString(36).slice(2,7)}`;
+  })));
+  return plan;
+}
+let PLAN = assignIds(JSON.parse(JSON.stringify(DEFAULT_PLAN)));
+let planJsonSha = null;
 
-const overallPct = pct(grandTotal);
-document.getElementById('stat-ae-pct').innerHTML =
-  `<span style="color:var(--ae)">${overallPct.AE.toFixed(0)}</span>/<span style="color:var(--rec-text)">${overallPct.REC.toFixed(0)}</span>/<span style="color:var(--thr)">${overallPct.THR.toFixed(0)}</span>`;
-document.getElementById('stat-ae').textContent = `${(grandTotal.AE/60).toFixed(1)}h (${overallPct.AE.toFixed(0)}%)`;
-document.getElementById('stat-rec').textContent = `${(grandTotal.REC/60).toFixed(1)}h (${overallPct.REC.toFixed(0)}%)`;
-document.getElementById('stat-thr').textContent = `${(grandTotal.THR/60).toFixed(1)}h (${overallPct.THR.toFixed(0)}%)`;
-
-const ob = document.getElementById('overall-bar');
-ob.innerHTML =
-  `<span style="background:var(--ae); width:${overallPct.AE}%"></span>` +
-  `<span style="background:var(--rec); width:${overallPct.REC}%"></span>` +
-  `<span style="background:var(--thr); width:${overallPct.THR}%"></span>`;
-
-function sessKey(w,d,s){ return `w${w}d${d}s${s}`; }
+function sessKey(s){ return s.id; }
 function isCheckable(s){ return s.e !== 'REST' && s.e !== 'RACE'; }
-
 let TOTAL_WORKOUTS = 0;
-PLAN.forEach(wk => wk.days.forEach(day => day.forEach(s => { if(isCheckable(s)) TOTAL_WORKOUTS++; })));
+function countWorkouts(){
+  TOTAL_WORKOUTS = 0;
+  PLAN.forEach(wk => wk.days.forEach(day => day.forEach(s => { if(isCheckable(s)) TOTAL_WORKOUTS++; })));
+}
+
+// Migrate any legacy positional done-keys (w{wk}d{day}s{si}) to stable session ids
+function normalizeDone(raw){
+  if(!raw || typeof raw !== 'object') return {};
+  const out = {};
+  Object.keys(raw).forEach(k => {
+    const m = k.match(/^w(\d+)d(\d+)s(\d+)$/);
+    if(m){
+      const day = PLAN[+m[1]] && PLAN[+m[1]].days[+m[2]];
+      const s = day && day[+m[3]];
+      if(s) out[s.id] = raw[k];
+    } else {
+      out[k] = raw[k];
+    }
+  });
+  return out;
+}
+
+let weeklyData = [];
+let grandTotal = {AE:0, REC:0, THR:0, STR:0};
+function recomputeStats(){
+  weeklyData = PLAN.map(weeklyTotals);
+  grandTotal = weeklyData.reduce((a,t) => ({
+    AE:a.AE+t.AE, REC:a.REC+t.REC, THR:a.THR+t.THR, STR:a.STR+t.STR
+  }), {AE:0,REC:0,THR:0,STR:0});
+  const totalHrs = (grandTotal.AE + grandTotal.REC + grandTotal.THR) / 60;
+  document.getElementById('stat-total').textContent = totalHrs.toFixed(1) + 'h';
+  const overallPct = pct(grandTotal);
+  document.getElementById('stat-ae-pct').innerHTML =
+    `<span style="color:var(--ae)">${overallPct.AE.toFixed(0)}</span>/<span style="color:var(--rec-text)">${overallPct.REC.toFixed(0)}</span>/<span style="color:var(--thr)">${overallPct.THR.toFixed(0)}</span>`;
+  document.getElementById('stat-ae').textContent = `${(grandTotal.AE/60).toFixed(1)}h (${overallPct.AE.toFixed(0)}%)`;
+  document.getElementById('stat-rec').textContent = `${(grandTotal.REC/60).toFixed(1)}h (${overallPct.REC.toFixed(0)}%)`;
+  document.getElementById('stat-thr').textContent = `${(grandTotal.THR/60).toFixed(1)}h (${overallPct.THR.toFixed(0)}%)`;
+  const ob = document.getElementById('overall-bar');
+  ob.innerHTML =
+    `<span style="background:var(--ae); width:${overallPct.AE}%"></span>` +
+    `<span style="background:var(--rec); width:${overallPct.REC}%"></span>` +
+    `<span style="background:var(--thr); width:${overallPct.THR}%"></span>`;
+  countWorkouts();
+}
+recomputeStats();
+
+function refreshAll(){ recomputeStats(); renderCalendar(); updateProgress(); updateChart(); }
 
 function doneCount(){
   let n = 0;
-  PLAN.forEach((wk,i) => wk.days.forEach((day,d) => day.forEach((s,si) => {
-    if(isCheckable(s) && DONE[sessKey(i,d,si)]) n++;
+  PLAN.forEach(wk => wk.days.forEach(day => day.forEach(s => {
+    if(isCheckable(s) && DONE[s.id]) n++;
   })));
   return n;
 }
@@ -1066,6 +1148,7 @@ function saveEditConfig(pat, repo, branch){
 function clearEditConfig(){
   Object.values(EDIT_KEYS).forEach(k => localStorage.removeItem(k));
   progressJsonSha = null;
+  planJsonSha = null;
 }
 function isUnlocked(){
   const c = getEditConfig();
@@ -1183,6 +1266,13 @@ function toggleDoneEdit(key){
 function updateLockUI(){
   const unlocked = isUnlocked();
   document.body.classList.toggle('edit-mode', unlocked);
+  if(!unlocked && editPlanMode){          // locking exits plan-edit mode
+    editPlanMode = false;
+    document.body.classList.remove('editing-plan');
+    const t = document.getElementById('editplan-toggle');
+    if(t){ t.classList.remove('active'); t.textContent = '✎ Edit plan'; }
+    renderCalendar();
+  }
   const btn = document.getElementById('lock-btn');
   btn.textContent = unlocked ? '🔓' : '🔒';
   btn.classList.toggle('unlocked', unlocked);
@@ -1236,15 +1326,19 @@ document.getElementById('lock-save').addEventListener('click', async () => {
   status.textContent = 'Testing token…';
   status.className = 'lock-status';
   try {
+    // load edited plan (if any) first so done-keys map correctly
+    try { const lp = await fetchPlanViaApi(); if(Array.isArray(lp) && lp.length){ PLAN = assignIds(lp); savePlanLocal(); } } catch(e){}
     const j = await fetchProgressViaApi();
-    DONE = j.done || {};
+    DONE = normalizeDone(j.done || {});
     UPDATED = j.updated;
     localStorage.setItem(EDIT_KEYS.cache, JSON.stringify(DONE));
+    recomputeStats();
     updateLockUI();
     renderCalendar();
     updateProgress();
     renderUpdated();
-    status.textContent = '✓ Connected. Tick checkboxes to save directly to GitHub.';
+    updateChart();
+    status.textContent = '✓ Connected. Drag/edit workouts and tick checkboxes — saved straight to GitHub.';
     status.className = 'lock-status ok';
     setTimeout(closeLockModal, 1400);
   } catch (e) {
@@ -1265,14 +1359,21 @@ document.getElementById('lock-clear').addEventListener('click', () => {
   clearEditConfig();
   updateLockUI();
   closeLockModal();
-  fetch('progress.json?v=' + Date.now(), { cache:'no-store' })
+  // reload the public (committed) plan + progress
+  fetch('plan.json?v=' + Date.now(), { cache:'no-store' })
     .then(r => r.ok ? r.json() : null)
-    .then(j => {
-      DONE = (j && j.done) || {};
-      UPDATED = j && j.updated;
-      renderCalendar();
-      updateProgress();
-      renderUpdated();
+    .then(p => { if(Array.isArray(p) && p.length){ PLAN = assignIds(p); recomputeStats(); updateChart(); } })
+    .catch(() => {})
+    .finally(() => {
+      fetch('progress.json?v=' + Date.now(), { cache:'no-store' })
+        .then(r => r.ok ? r.json() : null)
+        .then(j => {
+          DONE = normalizeDone((j && j.done) || {});
+          UPDATED = j && j.updated;
+          renderCalendar();
+          updateProgress();
+          renderUpdated();
+        });
     });
 });
 
@@ -1298,7 +1399,7 @@ function renderCalendar(){
 
     let wkTotal = 0, wkDone = 0;
     wk.days.forEach((day,d) => day.forEach((s,si) => {
-      if(isCheckable(s)){ wkTotal++; if(DONE[sessKey(i,d,si)]) wkDone++; }
+      if(isCheckable(s)){ wkTotal++; if(DONE[s.id]) wkDone++; }
     }));
 
     const lab = document.createElement('div');
@@ -1328,13 +1429,14 @@ function renderCalendar(){
       sessions.forEach((s, si) => {
         const cls = isRaceDay ? 'race' : (s.e === "REST" ? 'rest' : s.e.toLowerCase());
         const dataAttrs = `data-wk="${i}" data-day="${d}" data-si="${si}"`;
+        const drag = editPlanMode ? ' draggable="true"' : '';
         if(isCheckable(s)){
-          const done = !!DONE[sessKey(i, d, si)];
-          html += `<span class="sess ${cls}${done ? ' done' : ''}" ${dataAttrs}>`
+          const done = !!DONE[s.id];
+          html += `<span class="sess ${cls}${done ? ' done' : ''}" ${dataAttrs}${drag}>`
                 + `<span class="ck"></span>`
                 + `<span class="txt">${s.d}</span></span>`;
         } else {
-          html += `<span class="sess ${cls}" ${dataAttrs}><span class="txt">${s.d}</span></span>`;
+          html += `<span class="sess ${cls}" ${dataAttrs}${drag}><span class="txt">${s.d}</span></span>`;
         }
       });
       cell.innerHTML = html;
@@ -1349,14 +1451,24 @@ function renderCalendar(){
   });
 }
 
+function sidAt(w,d,si){ const s = PLAN[w] && PLAN[w].days[d] && PLAN[w].days[d][si]; return s ? s.id : null; }
+
 cal.addEventListener('click', e => {
+  // Edit-plan mode: clicking a workout opens its edit form
+  if(editPlanMode){
+    const sessEl = e.target.closest('.sess');
+    if(sessEl && sessEl.dataset.wk !== undefined){
+      openEdit(+sessEl.dataset.wk, +sessEl.dataset.day, +sessEl.dataset.si);
+    }
+    return;
+  }
   if(isUnlocked()){
     const ck = e.target.closest('.ck');
     if(ck){
       e.stopPropagation();
       const sessEl = ck.closest('.sess');
       if(sessEl && sessEl.dataset.wk !== undefined){
-        toggleDoneEdit(sessKey(+sessEl.dataset.wk, +sessEl.dataset.day, +sessEl.dataset.si));
+        toggleDoneEdit(sidAt(+sessEl.dataset.wk, +sessEl.dataset.day, +sessEl.dataset.si));
       }
       return;
     }
@@ -1370,11 +1482,148 @@ cal.addEventListener('click', e => {
   if(cell && cell.dataset.wk !== undefined){ openModal(+cell.dataset.wk, +cell.dataset.day); }
 });
 
+// ===== Plan editing: GitHub sync + drag/drop + edit form =====
+const PLAN_CACHE_KEY = 'im2026_edit_plan_cache';
+function savePlanLocal(){ try{ localStorage.setItem(PLAN_CACHE_KEY, JSON.stringify(PLAN)); }catch(e){} }
+
+async function fetchPlanViaApi(){
+  const c = getEditConfig();
+  const url = `https://api.github.com/repos/${c.repo}/contents/plan.json?ref=${encodeURIComponent(c.branch)}`;
+  const r = await fetch(url, {
+    headers:{ 'Authorization':`Bearer ${c.pat}`, 'Accept':'application/vnd.github+json' },
+    cache:'no-store'
+  });
+  if(r.status === 404){ planJsonSha = null; return null; }
+  if(!r.ok){
+    const err = await r.json().catch(() => ({}));
+    throw new Error(err.message || `GitHub GET plan failed (${r.status})`);
+  }
+  const j = await r.json();
+  planJsonSha = j.sha;
+  const decoded = decodeURIComponent(escape(atob(j.content.replace(/\n/g,''))));
+  return JSON.parse(decoded);
+}
+
+async function commitPlanOnce(){
+  const c = getEditConfig();
+  const payload = JSON.stringify(PLAN, null, 2);
+  const content = btoa(unescape(encodeURIComponent(payload)));
+  const body = { message:`Update plan (${new Date().toISOString().slice(0,10)})`, content, branch:c.branch };
+  if(planJsonSha) body.sha = planJsonSha;
+  return fetch(`https://api.github.com/repos/${c.repo}/contents/plan.json`, {
+    method:'PUT',
+    headers:{ 'Authorization':`Bearer ${c.pat}`, 'Accept':'application/vnd.github+json', 'Content-Type':'application/json' },
+    body: JSON.stringify(body)
+  });
+}
+async function commitPlan(){
+  let r = await commitPlanOnce();
+  if(r.status === 409 || r.status === 422){ await fetchPlanViaApi(); r = await commitPlanOnce(); }
+  if(!r.ok){
+    const err = await r.json().catch(() => ({}));
+    throw new Error(err.message || `GitHub PUT plan failed (${r.status})`);
+  }
+  const result = await r.json();
+  planJsonSha = result.content.sha;
+  return result;
+}
+let _committingPlan = false, _planDirty = false;
+async function pushPlanSoon(){
+  savePlanLocal();
+  if(!isUnlocked()) return;          // local-only if somehow editing while locked
+  if(_committingPlan){ _planDirty = true; return; }
+  _committingPlan = true;
+  try {
+    while(true){
+      _planDirty = false;
+      setEditIndicator('Saving plan…');
+      try { await commitPlan(); setEditIndicator('Plan saved ✓', 'ok', 1600); }
+      catch (e){ setEditIndicator('⚠ ' + (e.message || 'Plan save failed'), 'err', 5000); break; }
+      if(!_planDirty) break;
+    }
+  } finally { _committingPlan = false; }
+}
+
+let editPlanMode = false;
+const editPlanToggle = document.getElementById('editplan-toggle');
+editPlanToggle.addEventListener('click', () => {
+  if(!isUnlocked()){ openLockModal(); return; }   // editing requires the token
+  editPlanMode = !editPlanMode;
+  document.body.classList.toggle('editing-plan', editPlanMode);
+  editPlanToggle.classList.toggle('active', editPlanMode);
+  editPlanToggle.textContent = editPlanMode ? '✓ Done editing' : '✎ Edit plan';
+  renderCalendar();
+});
+
+function moveSession(src, tgtWk, tgtDay, beforeSi){
+  if(src.wk === tgtWk && src.day === tgtDay && (beforeSi === null || beforeSi === src.si)) return;
+  const srcArr = PLAN[src.wk].days[src.day];
+  const [moved] = srcArr.splice(src.si, 1);
+  if(!moved) return;
+  const tgtArr = PLAN[tgtWk].days[tgtDay];
+  let idx = (beforeSi === null || beforeSi === undefined) ? tgtArr.length : beforeSi;
+  if(src.wk === tgtWk && src.day === tgtDay && src.si < idx) idx--;
+  if(idx < 0 || idx > tgtArr.length) idx = tgtArr.length;
+  tgtArr.splice(idx, 0, moved);
+  refreshAll();
+  pushPlanSoon();
+}
+
+let dragSrc = null;
+cal.addEventListener('dragstart', e => {
+  if(!editPlanMode) return;
+  const sess = e.target.closest('.sess');
+  if(!sess || sess.dataset.wk === undefined) return;
+  dragSrc = {wk:+sess.dataset.wk, day:+sess.dataset.day, si:+sess.dataset.si};
+  sess.classList.add('dragging');
+  e.dataTransfer.effectAllowed = 'move';
+  try{ e.dataTransfer.setData('text/plain', sess.dataset.si); }catch(_){}
+});
+cal.addEventListener('dragend', () => {
+  dragSrc = null;
+  document.querySelectorAll('.cal .sess.dragging').forEach(el => el.classList.remove('dragging'));
+  document.querySelectorAll('.cal .day.drag-over').forEach(el => el.classList.remove('drag-over'));
+});
+cal.addEventListener('dragover', e => {
+  if(!editPlanMode || !dragSrc) return;
+  if(!e.target.closest('.day')) return;
+  e.preventDefault();
+  e.dataTransfer.dropEffect = 'move';
+});
+cal.addEventListener('dragenter', e => {
+  if(!editPlanMode || !dragSrc) return;
+  const cell = e.target.closest('.day');
+  if(cell) cell.classList.add('drag-over');
+});
+cal.addEventListener('dragleave', e => {
+  const cell = e.target.closest('.day');
+  if(cell && !cell.contains(e.relatedTarget)) cell.classList.remove('drag-over');
+});
+cal.addEventListener('drop', e => {
+  if(!editPlanMode || !dragSrc) return;
+  const cell = e.target.closest('.day');
+  if(!cell || cell.dataset.wk === undefined) return;
+  e.preventDefault();
+  cell.classList.remove('drag-over');
+  const targetSess = e.target.closest('.sess');
+  moveSession(dragSrc, +cell.dataset.wk, +cell.dataset.day, targetSess ? +targetSess.dataset.si : null);
+  dragSrc = null;
+});
+
 // ===== Volume chart =====
+let volChart = null;
+function updateChart(){
+  if(!volChart) return;
+  volChart.data.datasets[0].data = weeklyData.map(w=>w.AE/60);
+  volChart.data.datasets[1].data = weeklyData.map(w=>w.REC/60);
+  volChart.data.datasets[2].data = weeklyData.map(w=>w.THR/60);
+  volChart.data.datasets[3].data = weeklyData.map(w=>w.STR/60);
+  volChart.update();
+}
 if(typeof Chart !== 'undefined'){
   const ctx = document.getElementById('volChart').getContext('2d');
   const labels = PLAN.map((w,i)=>`W${String(i+1).padStart(2,'0')}`);
-  new Chart(ctx, {
+  volChart = new Chart(ctx, {
     type:'bar',
     data:{
       labels,
@@ -1439,6 +1688,67 @@ function openDetail(wkIdx, dayIdx, siIdx){
 }
 function backToWeek(){ modalMode = 'week'; renderModal(); }
 
+function openEdit(wkIdx, dayIdx, siIdx){
+  curModalWk = wkIdx; curModalDay = dayIdx; curModalSi = siIdx; modalMode = 'edit'; modalOpen = true;
+  renderEdit();
+  document.getElementById('modal').classList.add('open');
+}
+function renderEdit(){
+  const wkIdx = curModalWk, dayIdx = curModalDay, siIdx = curModalSi;
+  const wk = PLAN[wkIdx];
+  const sess = wk && wk.days[dayIdx] && wk.days[dayIdx][siIdx];
+  if(!sess){ closeModal(); return; }
+  const wkStart = new Date(START.getTime() + wkIdx*7*msDay);
+  const dayDate = new Date(wkStart.getTime() + dayIdx*msDay);
+  const efforts = ['AE','REC','THR','STR','REST','RACE'];
+  document.getElementById('modal-title').textContent = 'Edit workout';
+  document.getElementById('modal-meta').innerHTML =
+    `${DAYS[dayIdx]} ${dayDate.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})} · ` +
+    `Week ${wkIdx+1} · ${wk.block} · ${wk.phase}`;
+  const escd = (sess.d || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const body = document.getElementById('modal-body');
+  body.innerHTML = `
+    <div class="edit-form">
+      <div>
+        <label>Description</label>
+        <textarea id="ef-desc" spellcheck="false">${escd}</textarea>
+      </div>
+      <div class="edit-row">
+        <div>
+          <label>Duration (minutes)</label>
+          <input type="number" id="ef-min" min="0" step="5" value="${sess.m || 0}">
+        </div>
+      </div>
+      <div>
+        <label>Effort type</label>
+        <div class="edit-effort-opts" id="ef-effort">
+          ${efforts.map(x => `<div class="eff-opt ${x}${x===sess.e?' sel':''}" data-eff="${x}">${x}</div>`).join('')}
+        </div>
+      </div>
+      <div class="edit-actions">
+        <button class="save-btn" id="ef-save">Save changes</button>
+        <button class="cancel-btn" id="ef-cancel">Cancel</button>
+      </div>
+    </div>`;
+  let chosenEff = sess.e;
+  body.querySelectorAll('.eff-opt').forEach(el => {
+    el.addEventListener('click', () => {
+      chosenEff = el.dataset.eff;
+      body.querySelectorAll('.eff-opt').forEach(o => o.classList.remove('sel'));
+      el.classList.add('sel');
+    });
+  });
+  document.getElementById('ef-save').addEventListener('click', () => {
+    sess.d = document.getElementById('ef-desc').value.trim() || 'Workout';
+    sess.m = Math.max(0, parseInt(document.getElementById('ef-min').value, 10) || 0);
+    sess.e = chosenEff;
+    refreshAll();
+    pushPlanSoon();
+    closeModal();
+  });
+  document.getElementById('ef-cancel').addEventListener('click', closeModal);
+}
+
 function renderModal(){
   const wkIdx = curModalWk, dayIdx = curModalDay;
   const wk = PLAN[wkIdx];
@@ -1464,7 +1774,7 @@ function renderModal(){
         const dur = s.m > 0 ? ` <span class="dmin">(${s.m}m)</span>` : '';
         const dataAttrs = `data-wk="${wkIdx}" data-day="${i}" data-si="${si}"`;
         if(isCheckable(s)){
-          const done = !!DONE[sessKey(wkIdx, i, si)];
+          const done = !!DONE[s.id];
           return `<div class="dsess${done?' done':''}" ${dataAttrs} style="border-left:3px solid ${color}">` +
             `<span class="mck"></span>` +
             `<span class="dtxt">${s.d}${dur}</span></div>`;
@@ -1533,7 +1843,7 @@ function renderDetail(){
   }
 
   const checkSess = isCheckable(sess);
-  const key = checkSess ? sessKey(wkIdx, dayIdx, siIdx) : null;
+  const key = checkSess ? sess.id : null;
   const done = key && !!DONE[key];
   html += `<div class="detail-actions">`
     + `<button id="back-to-week">← Back to week view</button>`;
@@ -1564,7 +1874,7 @@ document.getElementById('modal-body').addEventListener('click', e => {
       e.stopPropagation();
       const dsessEl = mck.closest('.dsess');
       if(dsessEl && dsessEl.dataset.wk !== undefined){
-        toggleDoneEdit(sessKey(+dsessEl.dataset.wk, +dsessEl.dataset.day, +dsessEl.dataset.si));
+        toggleDoneEdit(sidAt(+dsessEl.dataset.wk, +dsessEl.dataset.day, +dsessEl.dataset.si));
       }
       return;
     }
@@ -1593,16 +1903,35 @@ const navObserver = new IntersectionObserver((entries) => {
 navTargets.forEach(id => { const el = document.getElementById(id); if(el) navObserver.observe(el); });
 
 // ===== Init =====
+function loadCachedPlan(){
+  const cached = localStorage.getItem(PLAN_CACHE_KEY);
+  if(cached){ try { const cp = JSON.parse(cached); if(Array.isArray(cp) && cp.length){ PLAN = assignIds(cp); } } catch (e) {} }
+}
+
 async function init(){
+  // 1) Plan — committed plan.json (edited) overrides the hardcoded default
+  try {
+    let loadedPlan = null;
+    if(isUnlocked()){
+      loadedPlan = await fetchPlanViaApi();           // null on 404
+    } else {
+      const pr = await fetch('plan.json?v=' + Date.now(), { cache:'no-store' });
+      if(pr.ok) loadedPlan = await pr.json();
+    }
+    if(Array.isArray(loadedPlan) && loadedPlan.length){ PLAN = assignIds(loadedPlan); savePlanLocal(); }
+    else loadCachedPlan();
+  } catch (e) { loadCachedPlan(); }
+
+  // 2) Progress
   if(isUnlocked()){
     try {
       const j = await fetchProgressViaApi();
-      DONE = j.done || {};
+      DONE = normalizeDone(j.done || {});
       UPDATED = j.updated;
       localStorage.setItem(EDIT_KEYS.cache, JSON.stringify(DONE));
     } catch (e) {
       const cached = localStorage.getItem(EDIT_KEYS.cache);
-      if(cached){ try { DONE = JSON.parse(cached); } catch (e2) {} }
+      if(cached){ try { DONE = normalizeDone(JSON.parse(cached)); } catch (e2) {} }
       setEditIndicator('⚠ ' + (e.message || 'API failed — using cache'), 'err', 6000);
     }
   } else {
@@ -1610,15 +1939,17 @@ async function init(){
       const r = await fetch('progress.json?v=' + Date.now(), { cache:'no-store' });
       if(r.ok){
         const j = await r.json();
-        DONE = j.done || {};
+        DONE = normalizeDone(j.done || {});
         UPDATED = j.updated;
       }
     } catch (e) {}
   }
+  recomputeStats();
   updateLockUI();
   renderCalendar();
   updateProgress();
   renderUpdated();
+  updateChart();
 }
 init();
 </script>
