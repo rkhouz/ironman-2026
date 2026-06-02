@@ -95,12 +95,6 @@
       ],
       [
         {
-          "d": "AM Bike 1h — 4×6m Sweet Spot",
-          "m": 60,
-          "e": "THR",
-          "id": "id_1_0_0_pu22g"
-        },
-        {
           "d": "AM Tempo Run 1h — 5×4m T",
           "m": 60,
           "e": "THR",
@@ -108,6 +102,12 @@
         }
       ],
       [
+        {
+          "d": "AM Bike 1h — 4×6m Sweet Spot",
+          "m": 60,
+          "e": "THR",
+          "id": "id_1_0_0_pu22g"
+        },
         {
           "d": "PM Strength 30m",
           "m": 30,
