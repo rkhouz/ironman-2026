@@ -117,12 +117,6 @@
       ],
       [
         {
-          "d": "AM Recovery Swim 2,800yd",
-          "m": 35,
-          "e": "REC",
-          "id": "id_1_3_0_8jdsm"
-        },
-        {
           "d": "PM Mid-week Run 1h Z2",
           "m": 60,
           "e": "AE",
@@ -146,6 +140,12 @@
         }
       ],
       [
+        {
+          "d": "AM Recovery Swim 2,800yd",
+          "m": 35,
+          "e": "REC",
+          "id": "id_1_3_0_8jdsm"
+        },
         {
           "d": "Long Run 1h30 Z2",
           "m": 90,
