@@ -141,12 +141,6 @@
       ],
       [
         {
-          "d": "AM Recovery Swim 2,800yd",
-          "m": 35,
-          "e": "REC",
-          "id": "id_1_3_0_8jdsm"
-        },
-        {
           "d": "Long Bike 3h30 Z2",
           "m": 210,
           "e": "AE",
@@ -162,6 +156,12 @@
     "peak": true,
     "days": [
       [
+        {
+          "d": "AM Recovery Swim 2,800yd",
+          "m": 35,
+          "e": "REC",
+          "id": "id_1_3_0_8jdsm"
+        },
         {
           "d": "PM Strength 30m",
           "m": 30,
