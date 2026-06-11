@@ -171,6 +171,12 @@
       ],
       [
         {
+          "d": "AM Aerobic Swim 2,500yd",
+          "m": 30,
+          "e": "AE",
+          "id": "id_2_1_0_kqutl"
+        },
+        {
           "d": "PM Easy Run 30m Z1",
           "m": 30,
           "e": "REC",
@@ -178,12 +184,6 @@
         }
       ],
       [
-        {
-          "d": "AM Aerobic Swim 2,500yd",
-          "m": 30,
-          "e": "AE",
-          "id": "id_2_1_0_kqutl"
-        },
         {
           "d": "AM Bike 1h15 — 3×10m Threshold",
           "m": 75,
