@@ -171,12 +171,6 @@
       ],
       [
         {
-          "d": "AM Bike 1h15 — 3×10m Threshold",
-          "m": 75,
-          "e": "THR",
-          "id": "id_2_0_0_m54is"
-        },
-        {
           "d": "PM Easy Run 30m Z1",
           "m": 30,
           "e": "REC",
@@ -189,6 +183,12 @@
           "m": 30,
           "e": "AE",
           "id": "id_2_1_0_kqutl"
+        },
+        {
+          "d": "AM Bike 1h15 — 3×10m Threshold",
+          "m": 75,
+          "e": "THR",
+          "id": "id_2_0_0_m54is"
         }
       ],
       [
