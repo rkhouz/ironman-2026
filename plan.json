@@ -242,6 +242,12 @@
           "m": 30,
           "e": "STR",
           "id": "id_3_0_0_fcty5"
+        },
+        {
+          "d": "AM Recovery Swim 2,000yd",
+          "m": 25,
+          "e": "REC",
+          "id": "id_3_1_0_uxu7k"
         }
       ],
       [
@@ -250,12 +256,6 @@
           "m": 240,
           "e": "AE",
           "id": "id_2_5_0_oucm4"
-        },
-        {
-          "d": "AM Recovery Swim 2,000yd",
-          "m": 25,
-          "e": "REC",
-          "id": "id_3_1_0_uxu7k"
         },
         {
           "d": "PM Easy Run 30m Z1",
