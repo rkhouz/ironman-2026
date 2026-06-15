@@ -219,14 +219,7 @@
           "id": "id_2_2_0_c2plf"
         }
       ],
-      [
-        {
-          "d": "Long Bike 4h Z2 — 3×15m SS embed",
-          "m": 240,
-          "e": "AE",
-          "id": "id_2_5_0_oucm4"
-        }
-      ],
+      [],
       [
         {
           "d": "Long Run 1h45 Z2",
@@ -252,6 +245,12 @@
         }
       ],
       [
+        {
+          "d": "Long Bike 4h Z2 — 3×15m SS embed",
+          "m": 240,
+          "e": "AE",
+          "id": "id_2_5_0_oucm4"
+        },
         {
           "d": "AM Recovery Swim 2,000yd",
           "m": 25,
