@@ -259,12 +259,6 @@
       ],
       [
         {
-          "d": "Long Run 1h45 Z2",
-          "m": 105,
-          "e": "AE",
-          "id": "id_2_6_0_iy74e"
-        },
-        {
           "d": "AM Easy Run 30m Z1",
           "m": 30,
           "e": "REC",
@@ -272,6 +266,12 @@
         }
       ],
       [
+        {
+          "d": "Long Run 1h45 Z2",
+          "m": 105,
+          "e": "AE",
+          "id": "id_2_6_0_iy74e"
+        },
         {
           "d": "AM Recovery Swim 2,000yd",
           "m": 25,
