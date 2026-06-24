@@ -340,6 +340,12 @@
       ],
       [
         {
+          "d": "AM Recovery Swim 3,000yd",
+          "m": 35,
+          "e": "REC",
+          "id": "id_4_3_0_kuho3"
+        },
+        {
           "d": "AM Tempo Run 1h — 4×6m T",
           "m": 60,
           "e": "THR",
@@ -347,12 +353,6 @@
         }
       ],
       [
-        {
-          "d": "AM Recovery Swim 3,000yd",
-          "m": 35,
-          "e": "REC",
-          "id": "id_4_3_0_kuho3"
-        },
         {
           "d": "PM Mid-week Run 1h Z2",
           "m": 60,
