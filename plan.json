@@ -505,14 +505,15 @@
           "id": "id_6_0_1_b36ly"
         }
       ],
-      [],
       [
         {
           "d": "AM Threshold Run 1h15 — 3×10m Threshold",
           "m": 75,
           "e": "THR",
           "id": "id_6_2_0_ljurj"
-        },
+        }
+      ],
+      [
         {
           "d": "AM Bike 1h30 — 4×12m Sweet Spot",
           "m": 90,
