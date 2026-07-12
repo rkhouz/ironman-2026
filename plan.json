@@ -603,12 +603,6 @@
       ],
       [
         {
-          "d": "PM Mid-week Long Run 1h15 Z2",
-          "m": 75,
-          "e": "AE",
-          "id": "id_8_3_1_b5e51"
-        },
-        {
           "d": "REST",
           "m": 0,
           "e": "REST",
@@ -621,6 +615,12 @@
           "m": 30,
           "e": "REC",
           "id": "id_7_3_1_60gov"
+        },
+        {
+          "d": "PM Mid-week Long Run 1h15 Z2",
+          "m": 75,
+          "e": "AE",
+          "id": "id_8_3_1_b5e51"
         }
       ],
       [
