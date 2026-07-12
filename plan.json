@@ -599,6 +599,12 @@
           "m": 30,
           "e": "REC",
           "id": "id_7_0_0_4cknk"
+        },
+        {
+          "d": "AM Bike 1h30 — Desc. Threshold 9/7/5",
+          "m": 90,
+          "e": "THR",
+          "id": "id_8_1_0_25tpf"
         }
       ],
       [
@@ -662,14 +668,7 @@
           "id": "id_8_0_0_zjbqs"
         }
       ],
-      [
-        {
-          "d": "AM Bike 1h30 — Desc. Threshold 9/7/5",
-          "m": 90,
-          "e": "THR",
-          "id": "id_8_1_0_25tpf"
-        }
-      ],
+      [],
       [
         {
           "d": "AM Race-pace Run 1h — 4×5m @RP",
