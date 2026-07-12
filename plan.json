@@ -617,12 +617,6 @@
       ],
       [
         {
-          "d": "PM Easy Run 30m Z1",
-          "m": 30,
-          "e": "REC",
-          "id": "id_7_3_1_60gov"
-        },
-        {
           "d": "PM Mid-week Long Run 1h15 Z2",
           "m": 75,
           "e": "AE",
@@ -676,7 +670,14 @@
           "id": "id_7_0_0_4cknk"
         }
       ],
-      [],
+      [
+        {
+          "d": "PM Easy Run 30m Z1",
+          "m": 30,
+          "e": "REC",
+          "id": "id_7_3_1_60gov"
+        }
+      ],
       [
         {
           "d": "AM Recovery Swim 2,800yd",
