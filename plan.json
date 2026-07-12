@@ -674,12 +674,6 @@
           "m": 35,
           "e": "REC",
           "id": "id_8_3_0_x4srb"
-        },
-        {
-          "d": "AM Easy Run 30m Z1",
-          "m": 30,
-          "e": "REC",
-          "id": "id_7_0_0_4cknk"
         }
       ],
       [
@@ -704,6 +698,12 @@
           "m": 35,
           "e": "REC",
           "id": "id_7_4_0_rscgv"
+        },
+        {
+          "d": "AM Easy Run 30m Z1",
+          "m": 30,
+          "e": "REC",
+          "id": "id_7_0_0_4cknk"
         }
       ],
       [
