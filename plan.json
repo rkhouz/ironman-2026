@@ -670,6 +670,12 @@
       ],
       [
         {
+          "d": "AM Recovery Swim 2,800yd",
+          "m": 35,
+          "e": "REC",
+          "id": "id_8_3_0_x4srb"
+        },
+        {
           "d": "AM Easy Run 30m Z1",
           "m": 30,
           "e": "REC",
@@ -685,12 +691,6 @@
         }
       ],
       [
-        {
-          "d": "AM Recovery Swim 2,800yd",
-          "m": 35,
-          "e": "REC",
-          "id": "id_8_3_0_x4srb"
-        },
         {
           "d": "AM Easy Run 45m Z2",
           "m": 45,
