@@ -623,14 +623,7 @@
           "id": "id_8_3_1_b5e51"
         }
       ],
-      [
-        {
-          "d": "AM Technique Swim 2,200yd",
-          "m": 35,
-          "e": "REC",
-          "id": "id_7_4_0_rscgv"
-        }
-      ],
+      [],
       [
         {
           "d": "Bike 2h30 Z2",
@@ -698,6 +691,12 @@
           "m": 45,
           "e": "THR",
           "id": "id_8_4_0_hvw7e"
+        },
+        {
+          "d": "AM Technique Swim 2,200yd",
+          "m": 35,
+          "e": "REC",
+          "id": "id_7_4_0_rscgv"
         }
       ],
       [
