@@ -581,12 +581,6 @@
     "days": [
       [
         {
-          "d": "AM Easy Run 30m Z1",
-          "m": 30,
-          "e": "REC",
-          "id": "id_7_0_0_4cknk"
-        },
-        {
           "d": "PM Strength 30m",
           "m": 30,
           "e": "STR",
@@ -599,6 +593,12 @@
           "m": 30,
           "e": "REC",
           "id": "id_7_3_0_0bfns"
+        },
+        {
+          "d": "AM Easy Run 30m Z1",
+          "m": 30,
+          "e": "REC",
+          "id": "id_7_0_0_4cknk"
         }
       ],
       [
