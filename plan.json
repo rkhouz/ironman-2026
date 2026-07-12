@@ -603,12 +603,6 @@
       ],
       [
         {
-          "d": "AM Easy Run 45m Z2",
-          "m": 45,
-          "e": "AE",
-          "id": "id_7_2_0_kimn4"
-        },
-        {
           "d": "PM Mid-week Long Run 1h15 Z2",
           "m": 75,
           "e": "AE",
@@ -690,6 +684,12 @@
           "m": 35,
           "e": "REC",
           "id": "id_8_3_0_x4srb"
+        },
+        {
+          "d": "AM Easy Run 45m Z2",
+          "m": 45,
+          "e": "AE",
+          "id": "id_7_2_0_kimn4"
         }
       ],
       [
