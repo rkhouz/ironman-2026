@@ -607,6 +607,12 @@
           "m": 0,
           "e": "REST",
           "id": "id_7_1_0_1b6ek"
+        },
+        {
+          "d": "AM Race-pace Run 1h — 4×5m @RP",
+          "m": 60,
+          "e": "THR",
+          "id": "id_8_2_0_chs97"
         }
       ],
       [
@@ -670,14 +676,7 @@
           "id": "id_7_0_0_4cknk"
         }
       ],
-      [
-        {
-          "d": "AM Race-pace Run 1h — 4×5m @RP",
-          "m": 60,
-          "e": "THR",
-          "id": "id_8_2_0_chs97"
-        }
-      ],
+      [],
       [
         {
           "d": "AM Recovery Swim 2,800yd",
