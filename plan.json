@@ -581,16 +581,16 @@
     "days": [
       [
         {
-          "d": "PM Strength 30m",
-          "m": 30,
-          "e": "STR",
-          "id": "id_7_0_1_5ftyy"
-        },
-        {
           "d": "AM Recovery Swim 2,200yd",
           "m": 30,
           "e": "REC",
           "id": "id_7_3_0_0bfns"
+        },
+        {
+          "d": "PM Strength 30m",
+          "m": 30,
+          "e": "STR",
+          "id": "id_7_0_1_5ftyy"
         }
       ],
       [
