@@ -637,6 +637,12 @@
           "m": 150,
           "e": "AE",
           "id": "id_7_5_0_p62yv"
+        },
+        {
+          "d": "Long Bike 4h30 race-pace Z2",
+          "m": 270,
+          "e": "AE",
+          "id": "id_8_5_0_e5e7m"
         }
       ],
       [
@@ -701,12 +707,6 @@
         }
       ],
       [
-        {
-          "d": "Long Bike 4h30 race-pace Z2",
-          "m": 270,
-          "e": "AE",
-          "id": "id_8_5_0_e5e7m"
-        },
         {
           "d": "Brick Run 30m @RP",
           "m": 30,
