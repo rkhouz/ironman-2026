@@ -611,16 +611,16 @@
       ],
       [
         {
-          "d": "REST",
-          "m": 0,
-          "e": "REST",
-          "id": "id_7_1_0_1b6ek"
-        },
-        {
           "d": "AM Easy Run 30m Z1",
           "m": 30,
           "e": "REC",
           "id": "id_8_0_0_zjbqs"
+        },
+        {
+          "d": "REST",
+          "m": 0,
+          "e": "REST",
+          "id": "id_7_1_0_1b6ek"
         }
       ],
       [
