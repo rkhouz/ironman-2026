@@ -660,7 +660,14 @@
     "phase": "Build 1",
     "hours": 13,
     "days": [
-      [],
+      [
+        {
+          "d": "PM Easy Run 30m Z1",
+          "m": 30,
+          "e": "REC",
+          "id": "id_7_3_1_60gov"
+        }
+      ],
       [
         {
           "d": "AM Race-pace Run 1h — 4×5m @RP",
@@ -675,12 +682,6 @@
           "m": 35,
           "e": "REC",
           "id": "id_8_3_0_x4srb"
-        },
-        {
-          "d": "PM Easy Run 30m Z1",
-          "m": 30,
-          "e": "REC",
-          "id": "id_7_3_1_60gov"
         }
       ],
       [
