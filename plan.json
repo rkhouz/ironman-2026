@@ -617,6 +617,12 @@
           "id": "id_7_1_0_1b6ek"
         },
         {
+          "d": "AM Easy Run 30m Z1",
+          "m": 30,
+          "e": "REC",
+          "id": "id_8_0_0_zjbqs"
+        },
+        {
           "d": "AM Race-pace Run 1h — 4×5m @RP",
           "m": 60,
           "e": "THR",
@@ -661,14 +667,7 @@
     "hours": 13,
     "days": [
       [],
-      [
-        {
-          "d": "AM Easy Run 30m Z1",
-          "m": 30,
-          "e": "REC",
-          "id": "id_8_0_0_zjbqs"
-        }
-      ],
+      [],
       [
         {
           "d": "AM Recovery Swim 2,800yd",
