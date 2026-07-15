@@ -607,12 +607,6 @@
           "m": 0,
           "e": "REST",
           "id": "id_7_1_0_1b6ek"
-        },
-        {
-          "d": "AM Race-pace Run 1h — 4×5m @RP",
-          "m": 60,
-          "e": "THR",
-          "id": "id_8_2_0_chs97"
         }
       ],
       [
@@ -621,6 +615,12 @@
           "m": 75,
           "e": "AE",
           "id": "id_8_3_1_b5e51"
+        },
+        {
+          "d": "AM Race-pace Run 1h — 4×5m @RP",
+          "m": 60,
+          "e": "THR",
+          "id": "id_8_2_0_chs97"
         }
       ],
       [
