@@ -641,6 +641,12 @@
       ],
       [
         {
+          "d": "AM OW Recovery Swim 2,800yd",
+          "m": 50,
+          "e": "REC",
+          "id": "id_8_6_0_dbz7j"
+        },
+        {
           "d": "Easy Run 1h Z2",
           "m": 60,
           "e": "AE",
@@ -714,12 +720,6 @@
         }
       ],
       [
-        {
-          "d": "AM OW Recovery Swim 2,800yd",
-          "m": 50,
-          "e": "REC",
-          "id": "id_8_6_0_dbz7j"
-        },
         {
           "d": "Long Run 2h Z2",
           "m": 120,
