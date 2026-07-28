@@ -743,14 +743,15 @@
           "id": "id_9_0_0_dupqq"
         }
       ],
-      [],
       [
         {
           "d": "AM Race-pace Run 1h15 — 2×20m @RP",
           "m": 75,
           "e": "THR",
           "id": "id_9_2_0_twnde"
-        },
+        }
+      ],
+      [
         {
           "d": "AM Bike 1h45 — 3×15m Threshold",
           "m": 105,
